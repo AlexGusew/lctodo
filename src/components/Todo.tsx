@@ -6,22 +6,19 @@ import { CheckCircleIcon as CheckCircleIconOutline } from "@heroicons/react/24/o
 import TodoDatePicker from "@/components/TodoDatePicker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-interface TodoItem {
-  id: string;
-  title: string;
-  done: boolean;
-  date?: Date;
-  changing: boolean;
-}
+import type { Question, TodoItem } from "@/app/types";
+import useStaticFile from "@/lib/useStaticFile";
+import Search from "@/components/Search";
 
 const Todo = () => {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const datesWrapperRef = useRef<HTMLParagraphElement>(null);
+  const { data, loading, error } = useStaticFile<Question[]>("/questions.json");
 
   const addTodo = useCallback((initialItem: Partial<TodoItem> = {}) => {
     const newTodo: TodoItem = {
-      id: crypto.randomUUID(),
+      // id: crypto.randomUUID(),
+      id: Math.random().toString(36).substr(2, 9),
       title: "",
       done: false,
       changing: false,
@@ -120,7 +117,7 @@ const Todo = () => {
 
   return (
     <>
-      <ul className="grid grid-cols-1 gap-4">
+      <ul className="grid grid-cols-1 gap-6">
         {todos.map((todo) => (
           <li key={todo.id.toString()} className="">
             <div className="flex space-x-2">
@@ -129,7 +126,7 @@ const Todo = () => {
                 onClick={() => toggleTodo(todo.id)}
                 disabled={!todo.title}
                 size={"icon"}
-                className="disabled:opacity-40 rounded-full"
+                className="disabled:opacity-40 rounded-full shrink-0"
               >
                 {todo.done ? (
                   <CheckCircleIconSolid className="text-green-500 !size-8" />
@@ -138,24 +135,12 @@ const Todo = () => {
                 )}
               </Button>
               {todo.changing ? (
-                <form
-                  className="w-full"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    toggleChangeTodo(todo.id);
-                  }}
-                >
-                  <Input
-                    placeholder="Problem number or link"
-                    onFocus={(e) => e.target.select()}
-                    type="text"
-                    value={todo.title}
-                    onBlur={() => toggleChangeTodo(todo.id)}
-                    onChange={(e) => changeTodo(todo.id, e.target.value)}
-                    className="border-none !ring-0 !text-base"
-                    autoFocus
-                  />
-                </form>
+                <Search
+                  todo={todo}
+                  toggleChangeTodo={toggleChangeTodo}
+                  changeTodo={changeTodo}
+                  questions={data}
+                />
               ) : (
                 <p
                   tabIndex={0}
