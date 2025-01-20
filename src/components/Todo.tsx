@@ -132,9 +132,9 @@ const Todo = () => {
                 className="disabled:opacity-40 rounded-full"
               >
                 {todo.done ? (
-                  <CheckCircleIconSolid className="h-5 w-6 text-green-500 !size-5" />
+                  <CheckCircleIconSolid className="text-green-500 !size-8" />
                 ) : (
-                  <CheckCircleIconOutline className="h-6 w-6 text-gray-500 dark:text-gray-400 !size-5" />
+                  <CheckCircleIconOutline className="text-gray-500 dark:text-gray-400 !size-8" />
                 )}
               </Button>
               {todo.changing ? (
