@@ -27,7 +27,7 @@ const Todo = () => {
       changing: false,
       ...initialItem,
     };
-    setTodos((todos) => [...todos, newTodo]);
+    setTodos((todos) => [newTodo, ...todos]);
   }, []);
 
   const changeTodo = (id: string, title: string) => {
@@ -54,7 +54,7 @@ const Todo = () => {
       return todo.changing;
     });
 
-    if (!anyChanging && todos[todos.length - 1].title) {
+    if (!anyChanging && todos[0].title) {
       addTodo({ changing: true });
     }
   };
@@ -69,10 +69,10 @@ const Todo = () => {
       });
       newTodos.sort((a, b) => {
         if (!a.title) {
-          return 1;
+          return -1;
         }
         if (!b.title) {
-          return -1;
+          return 1;
         }
         if (a.done && !b.done) {
           return 1;
@@ -85,7 +85,7 @@ const Todo = () => {
       return newTodos;
     });
   };
-  console.log(todos);
+
   const handleDateChange = (id: string) => (date?: Date) => {
     setTodos((todos) => {
       const newTodos = todos.map((todo) => {
@@ -184,23 +184,26 @@ const Todo = () => {
                   datesWrapperRef as React.RefObject<HTMLParagraphElement>
                 }
               />
-              {(
-                [
-                  ["+1d", 1],
-                  ["+3d", 3],
-                  ["+1w", 7],
-                ] as const
-              ).map(([label, value]) => (
-                <Button
-                  key={value}
-                  variant={`outline`}
-                  size={"sm"}
-                  onClick={() => addDate(todo.id, value)}
-                  className={!todo.date ? "opacity-0 pointer-events-none" : ""}
-                >
-                  {label}
-                </Button>
-              ))}
+              {todo.date &&
+                (
+                  [
+                    ["+1d", 1],
+                    ["+3d", 3],
+                    ["+1w", 7],
+                  ] as const
+                ).map(([label, value]) => (
+                  <Button
+                    key={value}
+                    variant={`outline`}
+                    size={"sm"}
+                    onClick={() => addDate(todo.id, value)}
+                    className={
+                      !todo.date ? "opacity-0 pointer-events-none" : ""
+                    }
+                  >
+                    {label}
+                  </Button>
+                ))}
             </p>
           </li>
         ))}
