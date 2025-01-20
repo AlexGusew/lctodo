@@ -5,10 +5,9 @@ import { CheckCircleIcon as CheckCircleIconSolid } from "@heroicons/react/24/sol
 import { CheckCircleIcon as CheckCircleIconOutline } from "@heroicons/react/24/outline";
 import TodoDatePicker from "@/components/TodoDatePicker";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import type { Question, TodoItem } from "@/app/types";
 import useStaticFile from "@/lib/useStaticFile";
-import Search from "@/components/Search";
+import { AutoComplete } from "@/components/Search";
 
 const Todo = () => {
   const [todos, setTodos] = useState<TodoItem[]>([]);
@@ -135,11 +134,8 @@ const Todo = () => {
                 )}
               </Button>
               {todo.changing ? (
-                <Search
-                  todo={todo}
-                  toggleChangeTodo={toggleChangeTodo}
-                  changeTodo={changeTodo}
-                  questions={data}
+                <AutoComplete
+                // TODO: Implement the AutoComplete component
                 />
               ) : (
                 <p
