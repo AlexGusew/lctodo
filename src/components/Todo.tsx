@@ -3,21 +3,64 @@
 import { useCallback, useEffect, useState } from "react";
 import type { TodoItem } from "@/app/types";
 import TodoItemComponent from "@/components/TodoItemComponent";
+import { getAllTodos, saveTodo } from "@/actions/problems";
+
+const useDebouncedEffect = (
+  effect: React.EffectCallback,
+  deps: React.DependencyList,
+  delay: number
+) => {
+  useEffect(() => {
+    const handler = setTimeout(() => effect(), delay);
+    return () => clearTimeout(handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [...deps, delay]);
+};
 
 const Todo = () => {
   const [todos, setTodos] = useState<TodoItem[]>([]);
+  const [initialLoad, setInitialLoad] = useState(true);
 
-  const addTodo = useCallback((initialItem: Partial<TodoItem> = {}) => {
-    const newTodo: TodoItem = {
-      id: Math.random().toString(36).substr(2, 9),
-      title: "",
-      done: false,
-      ...initialItem,
+  useEffect(() => {
+    const load = async () => {
+      const data = await getAllTodos();
+      console.log({ data });
+
+      setTodos(data);
+      setInitialLoad(false);
     };
-    setTodos((todos) => [newTodo, ...todos]);
+
+    load();
   }, []);
 
-  const onSetSelectedValue = (id: string) => (title: string) => {
+  useDebouncedEffect(
+    () => {
+      if (!initialLoad) {
+        const save = async () => {
+          console.log("client");
+          await saveTodo(todos);
+        };
+        save();
+      }
+    },
+    [todos],
+    2000 // debounce delay in milliseconds
+  );
+
+  const addTodo = useCallback(
+    async (initialItem: Partial<TodoItem> = {}) => {
+      const newTodo: TodoItem = {
+        id: crypto.randomUUID(),
+        title: "",
+        done: false,
+        ...initialItem,
+      };
+      setTodos((todos) => [newTodo, ...todos]);
+    },
+    [setTodos]
+  );
+
+  const onSetSelectedValue = (id: string) => async (title: string) => {
     setTodos((todos) =>
       todos.map((todo) => {
         if (todo.id === id) {

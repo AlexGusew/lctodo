@@ -26,7 +26,7 @@ const TodoItemComponent = ({
   const datesWrapperRef = useRef<HTMLParagraphElement>(null);
   const [selectedValue, setSelectedValue] = useState<string>("");
 
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState(todo.title);
   const [items, setItems] = useState<ProblemDto>([]);
   const [debSearchValue, setDebSearchValue] = useDebounceValue<string>("", 300);
   const [isLoading, setIsLoading] = useState(false);

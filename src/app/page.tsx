@@ -13,7 +13,7 @@ export default function Home() {
             height={24}
             alt="LeetCode logo"
           />
-          LeetCode Todo List
+          LcTodo
         </h1>
         <Todo />
       </main>
