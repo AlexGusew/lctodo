@@ -29,7 +29,7 @@ export function AutoComplete<T extends string>({
   onSelectedValueChange,
   searchValue,
   onSearchValueChange,
-  items,
+  items = [],
   isLoading,
   emptyMessage = "No items.",
   placeholder = "Search...",
@@ -70,7 +70,7 @@ export function AutoComplete<T extends string>({
   };
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center w-full">
       <Popover open={open} onOpenChange={setOpen}>
         <Command shouldFilter={false}>
           <PopoverAnchor asChild>
@@ -83,7 +83,10 @@ export function AutoComplete<T extends string>({
               onFocus={() => setOpen(true)}
               onBlur={onInputBlur}
             >
-              <Input placeholder={placeholder} />
+              <Input
+                placeholder={placeholder}
+                className="!ring-0 font-normal !outline-none border-none"
+              />
             </CommandPrimitive.Input>
           </PopoverAnchor>
           {!open && <CommandList aria-hidden="true" className="hidden" />}

@@ -3,7 +3,6 @@ export interface TodoItem {
   title: string;
   done: boolean;
   date?: Date;
-  changing: boolean;
 }
 
 export interface Question {
