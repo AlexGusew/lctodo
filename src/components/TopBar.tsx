@@ -1,7 +1,14 @@
-import { auth } from "@/lib/auth";
+import { auth, signOut } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/auth";
 import Image from "next/image";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
 
 export default function SignIn() {
   return (
@@ -25,7 +32,24 @@ export default function SignIn() {
 }
 
 const User = ({ name }: { name: string }) => {
-  return <Button variant={"link"}>{name}</Button>;
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="link">{name}</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem
+          onClick={async () => {
+            "use server";
+            await signOut();
+          }}
+        >
+          Sign out
+          <ArrowLeftStartOnRectangleIcon className="ml-auto" />
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 };
 
 export const TopBar = async () => {
@@ -33,8 +57,8 @@ export const TopBar = async () => {
   console.log(session);
 
   return (
-    <div className="max-w-2xl mx-auto pt-2 flex justify-end">
-      {session ? <User name={session?.user.name} /> : <SignIn />}
+    <div className="max-w-2xl mx-auto pt-4 flex justify-end">
+      {session?.user?.name ? <User name={session.user.name} /> : <SignIn />}
     </div>
   );
 };

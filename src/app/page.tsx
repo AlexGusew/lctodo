@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <TopBar />
-      <div className="min-h-screen p-8 sm:p-20 font-[family-name:var(--font-inter)]">
+      <div className="min-h-screen p-8 sm:pt-2 sm:p-20 font-[family-name:var(--font-inter)]">
         <main className="max-w-2xl mx-auto">
           <h1 className="text-2xl font-bold mb-10">
             <Image
