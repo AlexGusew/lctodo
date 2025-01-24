@@ -54,11 +54,6 @@ const User = ({ name }: { name: string }) => {
 
 export const TopBar = async () => {
   const session = await auth();
-  console.log(session);
 
-  return (
-    <div className="max-w-2xl mx-auto pt-4 flex justify-end">
-      {session?.user?.name ? <User name={session.user.name} /> : <SignIn />}
-    </div>
-  );
+  return session?.user?.name ? <User name={session.user.name} /> : <SignIn />;
 };

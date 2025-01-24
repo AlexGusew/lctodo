@@ -18,6 +18,7 @@ model User {
   sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
+  todos         Json            @default("[]")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

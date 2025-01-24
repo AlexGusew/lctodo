@@ -1,5 +1,6 @@
 import { CheckCircleIcon as CheckCircleIconSolid } from "@heroicons/react/24/solid";
 import { CheckCircleIcon as CheckCircleIconOutline } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import TodoDatePicker from "@/components/TodoDatePicker";
 import { Button } from "@/components/ui/button";
 import { AutoComplete } from "@/components/Search";
@@ -14,6 +15,7 @@ interface TodoItemComponentProps {
   handleDateChange: (date?: Date) => void;
   addDate: (value: number) => void;
   onSetSelectedValue: (value: string) => void;
+  removeTodo: () => void;
 }
 
 const TodoItemComponent = ({
@@ -22,6 +24,7 @@ const TodoItemComponent = ({
   handleDateChange,
   addDate,
   onSetSelectedValue,
+  removeTodo,
 }: TodoItemComponentProps) => {
   const datesWrapperRef = useRef<HTMLParagraphElement>(null);
   const [selectedValue, setSelectedValue] = useState<string>("");
@@ -76,6 +79,15 @@ const TodoItemComponent = ({
           emptyMessage="Search by problem number or title"
           isLoading={isLoading}
         />
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          disabled={!todo.title}
+          className="disabled:opacity-40 rounded-full shrink-0 size-8"
+          onClick={removeTodo}
+        >
+          <XMarkIcon className=" dark:text-gray-400" />
+        </Button>
       </div>
       <p
         className="text-gray-500 dark:text-gray-400 text-sm flex flex-row space-x-1 items-center"
@@ -92,16 +104,17 @@ const TodoItemComponent = ({
           (
             [
               ["+1d", 1],
-              ["+3d", 3],
               ["+1w", 7],
             ] as const
           ).map(([label, value]) => (
             <Button
               key={value}
-              variant={`outline`}
-              size={"sm"}
+              variant={`ghost`}
+              size={"icon"}
               onClick={() => addDate(value)}
-              className={!todo.date ? "opacity-0 pointer-events-none" : ""}
+              className={
+                (!todo.date ? "opacity-0 pointer-events-none" : "") + ""
+              }
             >
               {label}
             </Button>
