@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Command as CommandPrimitive } from "cmdk";
 import { Check } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type FocusEventHandler } from "react";
 import {
   Command,
   CommandEmpty,
@@ -13,7 +13,7 @@ import { Input } from "./ui/input";
 import { Popover, PopoverAnchor, PopoverContent } from "./ui/popover";
 import { Skeleton } from "./ui/skeleton";
 
-type Props<T extends string> = {
+type Props<T> = {
   selectedValue: T;
   onSelectedValueChange: (value: T) => void;
   searchValue: string;
@@ -22,6 +22,7 @@ type Props<T extends string> = {
   isLoading?: boolean;
   emptyMessage?: string;
   placeholder?: string;
+  onInputBlur?: FocusEventHandler<HTMLInputElement>;
 };
 
 export function AutoComplete<T extends string>({
@@ -50,15 +51,6 @@ export function AutoComplete<T extends string>({
     onSearchValueChange("");
   };
 
-  const onInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    if (
-      !e.relatedTarget?.hasAttribute("cmdk-list") &&
-      labels[selectedValue] !== searchValue
-    ) {
-      reset();
-    }
-  };
-
   const onSelectItem = (inputValue: string) => {
     if (inputValue === selectedValue) {
       reset();
@@ -81,7 +73,6 @@ export function AutoComplete<T extends string>({
               onKeyDown={(e) => setOpen(e.key !== "Escape")}
               onMouseDown={() => setOpen((open) => !!searchValue || !open)}
               onFocus={() => setOpen(true)}
-              onBlur={onInputBlur}
             >
               <Input
                 placeholder={placeholder}

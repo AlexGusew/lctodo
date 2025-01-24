@@ -5,7 +5,7 @@ import TodoDatePicker from "@/components/TodoDatePicker";
 import { Button } from "@/components/ui/button";
 import { AutoComplete } from "@/components/Search";
 import type { TodoItem } from "@/app/types";
-import { getProblems, type ProblemDto } from "@/actions/problems";
+import { getSuggestions, type ProblemDto } from "@/actions/problems";
 import { useEffect, useRef, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
 
@@ -16,6 +16,7 @@ interface TodoItemComponentProps {
   addDate: (value: number) => void;
   onSetSelectedValue: (value: string) => void;
   removeTodo: () => void;
+  onSetSearchValue: (value: string) => void;
 }
 
 const TodoItemComponent = ({
@@ -25,6 +26,7 @@ const TodoItemComponent = ({
   addDate,
   onSetSelectedValue,
   removeTodo,
+  onSetSearchValue,
 }: TodoItemComponentProps) => {
   const datesWrapperRef = useRef<HTMLParagraphElement>(null);
   const [selectedValue, setSelectedValue] = useState<string>("");
@@ -34,15 +36,16 @@ const TodoItemComponent = ({
   const [debSearchValue, setDebSearchValue] = useDebounceValue<string>("", 300);
   const [isLoading, setIsLoading] = useState(false);
 
-  const onSetSearchValue = (value: string) => {
+  const _onSetSearchValue = (value: string) => {
     setSearchValue(value);
+    onSetSearchValue(value);
     setDebSearchValue(value);
   };
 
   useEffect(() => {
     const load = async () => {
       setIsLoading(true);
-      const data = await getProblems(searchValue);
+      const data = await getSuggestions(searchValue);
       setIsLoading(false);
       setItems(data);
     };
@@ -69,7 +72,7 @@ const TodoItemComponent = ({
         </Button>
         <AutoComplete
           searchValue={searchValue}
-          onSearchValueChange={onSetSearchValue}
+          onSearchValueChange={_onSetSearchValue}
           items={items}
           onSelectedValueChange={(s) => {
             setSelectedValue(s);

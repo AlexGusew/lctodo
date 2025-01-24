@@ -1,10 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { TodoItem } from "@/app/types";
+import type { Question, TodoItem } from "@/app/types";
 import TodoItemComponent from "@/components/TodoItemComponent";
-import { saveTodo } from "@/actions/problems";
-import { useSession } from "next-auth/react";
+import { getAllQuestions, saveTodo } from "@/actions/problems";
 import {
   Collapsible,
   CollapsibleContent,
@@ -27,9 +26,14 @@ const useDebouncedEffect = (
 interface TodoProps {
   todos?: TodoItem[];
   isAuth: boolean;
+  questionsById?: Record<string, Question>;
 }
 
-const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
+const Todo = ({
+  todos: initialTodos = [],
+  isAuth,
+  questionsById,
+}: TodoProps) => {
   const [todos, setTodos] = useState<TodoItem[]>(initialTodos);
 
   useDebouncedEffect(
@@ -51,6 +55,7 @@ const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
         id: crypto.randomUUID(),
         title: "",
         done: false,
+        tags: [],
         ...initialItem,
       };
 
@@ -59,11 +64,32 @@ const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
     [setTodos]
   );
 
-  const onSetSelectedValue = (id: string) => async (title: string) => {
+  const onSetSelectedValue = (id: string) => async (QID: string) => {
+    const question = questionsById[QID];
+    console.log(question, QID, questionsById);
+
     setTodos((todos) =>
       todos.map((todo) => {
         if (todo.id === id) {
-          return { ...todo, title };
+          return {
+            ...todo,
+            title: `${question.QID}. ${question.title}`,
+            difficulty: question.difficulty,
+          };
+        }
+        return todo;
+      })
+    );
+  };
+
+  const onSetSearchValue = (id: string) => async (title: string) => {
+    setTodos((todos) =>
+      todos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            title,
+          };
         }
         return todo;
       })
@@ -142,6 +168,7 @@ const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
                 addDate={addDate(todo.id)}
                 onSetSelectedValue={onSetSelectedValue(todo.id)}
                 removeTodo={() => removeTodo(todo.id)}
+                onSetSearchValue={onSetSearchValue(todo.id)}
               />
             ))}
           </ul>

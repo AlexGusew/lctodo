@@ -1,10 +1,15 @@
+import { getAllQuestions } from "@/actions/problems";
 import Todo from "@/components/Todo";
 import { TopBar } from "@/components/TopBar";
 import { auth } from "@/lib/auth";
 import Image from "next/image";
 
 export default async function Home() {
-  const session = await auth();
+  const [session, questionsById] = await Promise.all([
+    auth(),
+    getAllQuestions(),
+  ]);
+
   console.log("server session", session);
   session?.user.todos.forEach((todo) => {
     todo.date = new Date(todo.date);
@@ -27,7 +32,11 @@ export default async function Home() {
             </h1>
             <TopBar />
           </div>
-          <Todo todos={session?.user?.todos} isAuth={!!session} />
+          <Todo
+            todos={session?.user?.todos}
+            questionsById={questionsById}
+            isAuth={!!session}
+          />
         </main>
       </div>
     </>

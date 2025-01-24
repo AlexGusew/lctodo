@@ -3,6 +3,8 @@ export interface TodoItem {
   title: string;
   done: boolean;
   date?: Date;
+  difficulty?: Question["difficulty"];
+  tags: string[];
 }
 
 export interface Question {
