@@ -1,6 +1,6 @@
 "use server";
 
-import type { Question, TodoItem } from "@/app/types";
+import type { Question, Session, TodoItem } from "@/app/types";
 import Fuse, { type FuseResult } from "fuse.js";
 import allQuestions from "@/../public/questions.json";
 import { auth } from "@/lib/auth";
@@ -61,12 +61,11 @@ export const getSuggestions = cache(
 );
 
 export async function saveTodo(todos: TodoItem[]): Promise<void> {
-  const session = await auth();
-
+  // Extending TS Session interface is broken
+  // See https://github.com/nextauthjs/next-auth/issues/6640
+  const session = (await auth()) as Session;
   if (!session?.user?.email) return;
-  console.log({ session });
-  console.log("id", session.id);
-session.
+
   await prisma.user.update({
     where: { id: session.userId },
     data: { todos: todos as unknown as Prisma.JsonArray },
@@ -74,13 +73,11 @@ session.
 }
 
 export async function changeShowTags(showTags: boolean) {
-  const session = await auth();
-  console.log(session.id);
-
+  const session = (await auth()) as Session;
   if (!session?.user?.email) return;
 
   await prisma.user.update({
-    where: { id: session.id },
+    where: { id: session.userId },
     data: { showTags },
   });
 }

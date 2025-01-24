@@ -53,7 +53,6 @@ const TodoItemComponent = ({
 
   const load = async () => {
     if (initialRender || isLoading || searchValue.length < 3) return;
-    console.log("load");
 
     setIsLoading(true);
     const data = await getSuggestions(searchValue);

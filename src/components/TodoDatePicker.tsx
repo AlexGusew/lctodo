@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/popover";
 import type { DayPickerSingleProps } from "react-day-picker";
 import { PopoverAnchor } from "@radix-ui/react-popover";
-import Chip from "@/components/ui/chip"; // Import Chip component
 import { useState } from "react";
 import useMediaQuery from "@/lib/useMediaQuery";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";

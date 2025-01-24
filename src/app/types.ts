@@ -1,3 +1,12 @@
+import type { DefaultSession } from "next-auth";
+
+export interface Session extends DefaultSession {
+  userId: string;
+  user: {
+    todos: TodoItem[];
+  } & DefaultSession["user"];
+}
+
 export interface TodoItem {
   id: string;
   title: string;

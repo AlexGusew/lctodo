@@ -13,11 +13,12 @@ import { Input } from "./ui/input";
 import { Popover, PopoverAnchor, PopoverContent } from "./ui/popover";
 import { Skeleton } from "./ui/skeleton";
 import { DifficultyChip } from "@/components/ui/DifficultyChip";
+import type { SuggestionDto } from "@/actions/problems";
 
 interface DefaultItem {
   id: string;
   label: string;
-  data: any;
+  data: unknown;
 }
 
 type Props<T extends DefaultItem> = {
@@ -40,7 +41,6 @@ export function AutoComplete<T extends DefaultItem>({
   onSearchValueChange,
   items = [],
   isLoading,
-  renderOption,
   emptyMessage = "No items.",
   placeholder = "Search...",
 }: Props<T>) {
@@ -127,8 +127,16 @@ export function AutoComplete<T extends DefaultItem>({
                           selectedId === option.id ? "opacity-100" : "opacity-0"
                         )}
                       />
-                      <span className="mr-auto">{option.label}</span>
-                      <DifficultyChip difficulty={option.data.difficulty} />
+                      <span className="mr-auto">
+                        {/* TODO: Make generics instead */}
+                        {(option as unknown as SuggestionDto[number]).label}
+                      </span>
+                      <DifficultyChip
+                        difficulty={
+                          (option as unknown as SuggestionDto[number]).data
+                            .difficulty
+                        }
+                      />
                     </CommandItem>
                   ))}
                 </CommandGroup>

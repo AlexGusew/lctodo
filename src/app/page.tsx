@@ -1,3 +1,4 @@
+import type { Session } from "@/app/types";
 import { Footer } from "@/components/Footer";
 import Todo from "@/components/Todo";
 import { TopBar } from "@/components/TopBar";
@@ -6,9 +7,9 @@ import Image from "next/image";
 
 export default async function Home() {
   const session = await auth();
-  console.log("server session", session);
-  session?.user.todos.forEach((todo) => {
-    todo.date = new Date(todo.date);
+  const typedSession = session as Session;
+  typedSession?.user.todos.forEach((todo) => {
+    todo.date = todo.date ? new Date(todo.date) : undefined;
   });
 
   return (
@@ -28,7 +29,7 @@ export default async function Home() {
             </h1>
             <TopBar />
           </div>
-          <Todo todos={session?.user?.todos} isAuth={!!session} />
+          <Todo todos={typedSession?.user?.todos} isAuth={!!session} />
         </main>
       </div>
       <hr className="mb-2" />
