@@ -43,9 +43,9 @@ const TodoDatePicker = ({
     tomorrow.setDate(today.getDate() + 1);
 
     if (format(date, "yyyy-MM-dd") === format(today, "yyyy-MM-dd")) {
-      return <Chip label="Today" />;
+      return "Today";
     } else if (format(date, "yyyy-MM-dd") === format(tomorrow, "yyyy-MM-dd")) {
-      return <Chip label="Tomorrow" />;
+      return "Tomorrow";
     } else {
       return format(date, "eee, dd MMMM");
     }

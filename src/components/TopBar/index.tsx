@@ -6,9 +6,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
+import { ShowTags } from "@/components/TopBar/ShowTags";
 
 export default function SignIn() {
   return (
@@ -31,29 +33,28 @@ export default function SignIn() {
   );
 }
 
-const User = ({ name }: { name: string }) => {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="link">{name}</Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem
-          onClick={async () => {
-            "use server";
-            await signOut();
-          }}
-        >
-          Sign out
-          <ArrowLeftStartOnRectangleIcon className="ml-auto" />
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-};
+const User = ({ name }: { name: string }) => (
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Button variant="link">{name}</Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent align="end">
+      <ShowTags />
+      <DropdownMenuSeparator />
+      <DropdownMenuItem
+        onClick={async () => {
+          "use server";
+          await signOut();
+        }}
+      >
+        Sign out
+        <ArrowLeftStartOnRectangleIcon className="ml-auto" />
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+);
 
 export const TopBar = async () => {
   const session = await auth();
-
   return session?.user?.name ? <User name={session.user.name} /> : <SignIn />;
 };

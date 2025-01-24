@@ -12,26 +12,35 @@ import {
 import { Input } from "./ui/input";
 import { Popover, PopoverAnchor, PopoverContent } from "./ui/popover";
 import { Skeleton } from "./ui/skeleton";
+import { DifficultyChip } from "@/components/ui/DifficultyChip";
 
-type Props<T> = {
-  selectedValue: T;
-  onSelectedValueChange: (value: T) => void;
+interface DefaultItem {
+  id: string;
+  label: string;
+  data: any;
+}
+
+type Props<T extends DefaultItem> = {
+  selectedId: string;
+  onSelectedValueChange: (value: T | null) => void;
   searchValue: string;
   onSearchValueChange: (value: string) => void;
-  items: { value: T; label: string }[];
+  items: T[];
   isLoading?: boolean;
   emptyMessage?: string;
   placeholder?: string;
   onInputBlur?: FocusEventHandler<HTMLInputElement>;
+  renderOption?: (item: T) => React.ReactNode;
 };
 
-export function AutoComplete<T extends string>({
-  selectedValue,
+export function AutoComplete<T extends DefaultItem>({
+  selectedId,
   onSelectedValueChange,
   searchValue,
   onSearchValueChange,
   items = [],
   isLoading,
+  renderOption,
   emptyMessage = "No items.",
   placeholder = "Search...",
 }: Props<T>) {
@@ -40,23 +49,23 @@ export function AutoComplete<T extends string>({
   const labels = useMemo(
     () =>
       items.reduce((acc, item) => {
-        acc[item.value] = item.label;
+        acc[item.id] = item;
         return acc;
-      }, {} as Record<string, string>),
+      }, {} as Record<string, T>),
     [items]
   );
 
   const reset = () => {
-    onSelectedValueChange("" as T);
+    onSelectedValueChange(null);
     onSearchValueChange("");
   };
 
   const onSelectItem = (inputValue: string) => {
-    if (inputValue === selectedValue) {
+    if (inputValue === selectedId) {
       reset();
     } else {
-      onSelectedValueChange(inputValue as T);
-      onSearchValueChange(labels[inputValue] ?? "");
+      onSelectedValueChange(labels[inputValue] ?? null);
+      onSearchValueChange(labels[inputValue]?.label ?? "");
     }
     setOpen(false);
   };
@@ -76,7 +85,7 @@ export function AutoComplete<T extends string>({
             >
               <Input
                 placeholder={placeholder}
-                className="!ring-0 font-normal !outline-none border-none"
+                className="!ring-0 font-normal !outline-none border-none text-ellipsis"
               />
             </CommandPrimitive.Input>
           </PopoverAnchor>
@@ -92,7 +101,8 @@ export function AutoComplete<T extends string>({
                 e.preventDefault();
               }
             }}
-            className="w-[--radix-popover-trigger-width] p-0"
+            // className="p-0"
+            className="sm:w-[--radix-popover-trigger-width] w-[calc(100vw-20px)] p-0"
           >
             <CommandList>
               {isLoading && (
@@ -106,20 +116,19 @@ export function AutoComplete<T extends string>({
                 <CommandGroup>
                   {items.map((option) => (
                     <CommandItem
-                      key={option.value}
-                      value={option.value}
+                      key={option.id}
+                      value={option.id}
                       onMouseDown={(e) => e.preventDefault()}
                       onSelect={onSelectItem}
                     >
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          selectedValue === option.value
-                            ? "opacity-100"
-                            : "opacity-0"
+                          selectedId === option.id ? "opacity-100" : "opacity-0"
                         )}
                       />
-                      {option.label}
+                      <span className="mr-auto">{option.label}</span>
+                      <DifficultyChip difficulty={option.data.difficulty} />
                     </CommandItem>
                   ))}
                 </CommandGroup>

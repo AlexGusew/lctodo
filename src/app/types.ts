@@ -5,6 +5,7 @@ export interface TodoItem {
   date?: Date;
   difficulty?: Question["difficulty"];
   tags: string[];
+  titleSlug?: string;
 }
 
 export interface Question {

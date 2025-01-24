@@ -3,25 +3,14 @@
 import { useCallback, useEffect, useState } from "react";
 import type { Question, TodoItem } from "@/app/types";
 import TodoItemComponent from "@/components/TodoItemComponent";
-import { getAllQuestions, saveTodo } from "@/actions/problems";
+import { saveTodo, type SuggestionDto } from "@/actions/problems";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ChevronUpDownIcon } from "@heroicons/react/24/solid";
-
-const useDebouncedEffect = (
-  effect: React.EffectCallback,
-  deps: React.DependencyList,
-  delay: number
-) => {
-  useEffect(() => {
-    const handler = setTimeout(() => effect(), delay);
-    return () => clearTimeout(handler);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [...deps, delay]);
-};
+import { useDebouncedEffect } from "@/lib/useDebouncedEffect";
 
 interface TodoProps {
   todos?: TodoItem[];
@@ -29,11 +18,7 @@ interface TodoProps {
   questionsById?: Record<string, Question>;
 }
 
-const Todo = ({
-  todos: initialTodos = [],
-  isAuth,
-  questionsById,
-}: TodoProps) => {
+const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
   const [todos, setTodos] = useState<TodoItem[]>(initialTodos);
 
   useDebouncedEffect(
@@ -64,23 +49,30 @@ const Todo = ({
     [setTodos]
   );
 
-  const onSetSelectedValue = (id: string) => async (QID: string) => {
-    const question = questionsById[QID];
-    console.log(question, QID, questionsById);
-
-    setTodos((todos) =>
-      todos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            title: `${question.QID}. ${question.title}`,
-            difficulty: question.difficulty,
-          };
-        }
-        return todo;
-      })
-    );
-  };
+  const onSetSelectedValue =
+    (id: string) => async (suggestion: SuggestionDto[number] | null) => {
+      setTodos((todos) =>
+        todos.map((todo) => {
+          if (todo.id === id) {
+            if (!suggestion) {
+              return {
+                ...todo,
+                title: "",
+                difficulty: undefined,
+              };
+            }
+            return {
+              ...todo,
+              title: suggestion.label,
+              difficulty: suggestion.data.difficulty,
+              tags: suggestion.data.topicTags,
+              titleSlug: suggestion.data.titleSlug,
+            };
+          }
+          return todo;
+        })
+      );
+    };
 
   const onSetSearchValue = (id: string) => async (title: string) => {
     setTodos((todos) =>
@@ -158,7 +150,7 @@ const Todo = ({
           </h2>
         </CollapsibleTrigger>
         <CollapsibleContent>
-          <ul className="grid grid-cols-1 gap-6">
+          <ul className="grid grid-cols-1 gap-8">
             {inProgressTodos.map((todo) => (
               <TodoItemComponent
                 key={todo.id.toString()}
@@ -182,7 +174,7 @@ const Todo = ({
               </h2>
             </CollapsibleTrigger>
             <CollapsibleContent>
-              <ul className="grid grid-cols-1 gap-6">
+              <ul className="grid grid-cols-1 gap-8">
                 {doneTodos.map((todo) => (
                   <TodoItemComponent
                     key={todo.id.toString()}
@@ -192,6 +184,7 @@ const Todo = ({
                     addDate={addDate(todo.id)}
                     onSetSelectedValue={onSetSelectedValue(todo.id)}
                     removeTodo={() => removeTodo(todo.id)}
+                    onSetSearchValue={onSetSearchValue(todo.id)}
                   />
                 ))}
               </ul>

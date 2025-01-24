@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SessionProvider } from "next-auth/react";
+import { JotaiProvider } from "@/components/JotaiProvider";
+
 import "./globals.css";
 
 const geistSans = Inter({
@@ -31,7 +33,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SessionProvider>{children}</SessionProvider>
+          <SessionProvider>
+            <JotaiProvider>{children}</JotaiProvider>
+          </SessionProvider>
         </ThemeProvider>
       </body>
     </html>

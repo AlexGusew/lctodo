@@ -1,6 +1,5 @@
 import { DefaultSession } from "next-auth";
 import { TodoItem } from "./types";
-export {};
 
 declare global {
   namespace NodeJS {
@@ -10,14 +9,16 @@ declare global {
   }
 }
 
-declare module "next-auth" {
+declare module "@auth/core/types" {
   /**
    * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
    */
+
   interface Session {
+    userId: string;
     user: {
       /** The user's postal address. */
-      todos: TodoItem[];
+      userId: string;
       /**
        * By default, TypeScript merges new interface properties and overwrites existing ones.
        * In this case, the default session user properties will be overwritten,
@@ -27,3 +28,5 @@ declare module "next-auth" {
     } & DefaultSession["user"];
   }
 }
+
+export {};
