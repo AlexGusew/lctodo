@@ -67,6 +67,7 @@ const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
               difficulty: suggestion.data.difficulty,
               tags: suggestion.data.topicTags,
               titleSlug: suggestion.data.titleSlug,
+              selectedProblemId: suggestion.id,
             };
           }
           return todo;

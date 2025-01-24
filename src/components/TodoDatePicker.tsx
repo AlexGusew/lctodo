@@ -1,8 +1,6 @@
 "use client";
 
 import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -16,6 +14,8 @@ import { PopoverAnchor } from "@radix-ui/react-popover";
 import { useState } from "react";
 import useMediaQuery from "@/lib/useMediaQuery";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { CalendarIcon } from "@heroicons/react/24/outline";
+import { CalendarIcon as SolidCalendarIcon } from "@heroicons/react/24/solid";
 
 type TodoDatePickerProps = Pick<
   DayPickerSingleProps,
@@ -72,7 +72,11 @@ const TodoDatePicker = ({
               !selected && "text-muted-foreground"
             )}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            {!!selected ? (
+              <SolidCalendarIcon className="rm-2 h4 w-4" />
+            ) : (
+              <CalendarIcon className="mr-2 h-4 w-4" />
+            )}
             {!!selected && getDisplayDate(selected)}
           </Button>
         </PopoverTrigger>

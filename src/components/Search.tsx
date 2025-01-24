@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
 import { Command as CommandPrimitive } from "cmdk";
-import { Check } from "lucide-react";
 import { useMemo, useState, type FocusEventHandler } from "react";
 import {
   Command,
@@ -14,6 +13,7 @@ import { Popover, PopoverAnchor, PopoverContent } from "./ui/popover";
 import { Skeleton } from "./ui/skeleton";
 import { DifficultyChip } from "@/components/ui/DifficultyChip";
 import type { SuggestionDto } from "@/actions/problems";
+import { CheckIcon } from "@heroicons/react/24/outline";
 
 interface DefaultItem {
   id: string;
@@ -22,7 +22,7 @@ interface DefaultItem {
 }
 
 type Props<T extends DefaultItem> = {
-  selectedId: string;
+  selectedId?: string;
   onSelectedValueChange: (value: T | null) => void;
   searchValue: string;
   onSearchValueChange: (value: string) => void;
@@ -101,7 +101,6 @@ export function AutoComplete<T extends DefaultItem>({
                 e.preventDefault();
               }
             }}
-            // className="p-0"
             className="sm:w-[--radix-popover-trigger-width] w-[calc(100vw-20px)] p-0"
           >
             <CommandList>
@@ -121,7 +120,7 @@ export function AutoComplete<T extends DefaultItem>({
                       onMouseDown={(e) => e.preventDefault()}
                       onSelect={onSelectItem}
                     >
-                      <Check
+                      <CheckIcon
                         className={cn(
                           "mr-2 h-4 w-4",
                           selectedId === option.id ? "opacity-100" : "opacity-0"

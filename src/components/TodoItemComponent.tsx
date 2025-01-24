@@ -91,9 +91,9 @@ const TodoItemComponent = ({
           className="disabled:opacity-40 rounded-full shrink-0"
         >
           {todo.done ? (
-            <CheckCircleIconSolid className="text-green-500 !size-8" />
+            <CheckCircleIconSolid className="text-green-500 !size-6" />
           ) : (
-            <CheckCircleIconOutline className="text-gray-500 dark:text-gray-400 !size-8" />
+            <CheckCircleIconOutline className="text-gray-500 dark:text-gray-400 !size-6" />
           )}
         </Button>
         <div className="w-full flex justify-start items-center">
@@ -104,7 +104,7 @@ const TodoItemComponent = ({
             onSelectedValueChange={(s) => {
               onSetSelectedValue(s);
             }}
-            selectedId={todo.id}
+            selectedId={todo.selectedProblemId}
             emptyMessage="Search by problem number or title"
             isLoading={isLoading}
           />

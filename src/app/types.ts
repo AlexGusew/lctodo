@@ -2,7 +2,8 @@ import type { DefaultSession } from "next-auth";
 
 export interface Session extends DefaultSession {
   userId: string;
-  user: {
+  user?: {
+    showTags: boolean;
     todos: TodoItem[];
   } & DefaultSession["user"];
 }
@@ -15,6 +16,7 @@ export interface TodoItem {
   difficulty?: Question["difficulty"];
   tags: string[];
   titleSlug?: string;
+  selectedProblemId?: string;
 }
 
 export interface Question {
