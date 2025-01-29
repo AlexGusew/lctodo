@@ -106,7 +106,7 @@ const TodoItemComponent = ({
             onSelectedValueChange={(s) => {
               onSetSelectedValue(s);
             }}
-            selectedId={todo.selectedProblemId}
+            selectedId={todo.QID}
             emptyMessage="Search by problem number or title"
             isLoading={isLoading}
           />

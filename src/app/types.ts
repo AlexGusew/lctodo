@@ -16,7 +16,7 @@ export interface TodoItem {
   difficulty?: Question["difficulty"];
   tags: string[];
   titleSlug?: string;
-  selectedProblemId?: string;
+  QID?: string;
 }
 
 export interface Question {

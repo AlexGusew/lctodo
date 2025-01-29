@@ -1,5 +1,6 @@
 "use client";
 
+import type { TodoItem } from "@/app/types";
 import { atom } from "jotai";
 
 export const showTagsAtom = atom(true);
@@ -9,3 +10,7 @@ export const sectionOpen = atom({
   future: true,
   inProgress: true,
 });
+
+export const todosAtom = atom<TodoItem[]>([]);
+
+export const isDailyDoneAtom = atom(false);

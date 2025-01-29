@@ -7,6 +7,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { cache } from "react";
 import type { Prisma } from "@prisma/client";
+import { get } from "@vercel/edge-config";
 
 const questionsById = (allQuestions as Question[]).reduce((acc, question) => {
   acc[question.QID] = question;
@@ -80,4 +81,12 @@ export async function changeShowTags(showTags: boolean) {
     where: { id: session.userId },
     data: { showTags },
   });
+}
+
+export async function getDailyQuestion() {
+  const QID = await get<string>("dailyQID");
+  if (!QID) {
+    return null;
+  }
+  return questionsById[QID] ?? null;
 }

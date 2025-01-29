@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import type { Question, TodoItem } from "@/app/types";
 import TodoItemComponent from "@/components/TodoItemComponent";
 import { saveTodo, type SuggestionDto } from "@/actions/problems";
@@ -13,17 +13,26 @@ import { ChevronUpDownIcon } from "@heroicons/react/24/solid";
 import { useDebouncedEffect } from "@/lib/useDebouncedEffect";
 import { endOfToday, isAfter, isBefore, startOfTomorrow } from "date-fns";
 import { useAtom, type ExtractAtomValue } from "jotai";
-import { sectionOpen } from "@/state";
+import { isDailyDoneAtom, sectionOpen, todosAtom } from "@/state";
+import { useHydrateAtoms } from "jotai/utils";
 
 interface TodoProps {
   todos?: TodoItem[];
   isAuth: boolean;
   questionsById?: Record<string, Question>;
+  dailyQuestion?: Question;
 }
 
-const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
-  const [todos, setTodos] = useState<TodoItem[]>(initialTodos);
+const Todo = ({
+  todos: initialTodos = [],
+  isAuth,
+  dailyQuestion,
+}: TodoProps) => {
+  useHydrateAtoms([[todosAtom, initialTodos]]);
+
+  const [todos, setTodos] = useAtom(todosAtom);
   const [sectionOpenValue, setSectionOpen] = useAtom(sectionOpen);
+  const [, setIsDailyDone] = useAtom(isDailyDoneAtom);
 
   const onOpenChange =
     (prop: keyof ExtractAtomValue<typeof sectionOpen>) => (isOpen: boolean) => {
@@ -79,7 +88,7 @@ const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
               difficulty: suggestion.data.difficulty,
               tags: suggestion.data.topicTags,
               titleSlug: suggestion.data.titleSlug,
-              selectedProblemId: suggestion.id,
+              QID: suggestion.id,
             };
           }
           return todo;
@@ -105,6 +114,9 @@ const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
     setTodos((todos) => {
       const newTodos = todos.map((todo) => {
         if (todo.id === id) {
+          if (todo.QID === dailyQuestion?.QID) {
+            setIsDailyDone(true);
+          }
           return { ...todo, done: !todo.done };
         }
         return todo;
@@ -223,7 +235,7 @@ const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
   ] as const;
 
   return (
-    <>
+    <div className="mt-[-1rem]">
       {allTodos.map(([todos, label, isOpen, onOpen, closeDisabled]) => (
         <Collapsible open={isOpen} key={label} onOpenChange={onOpen}>
           <CollapsibleTrigger>
@@ -251,7 +263,7 @@ const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
           </CollapsibleContent>
         </Collapsible>
       ))}
-    </>
+    </div>
   );
 };
 

@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default async function Home() {
   return (
-    <div className="flex items-center justify-between align-middle mt-4 max-sm:mb-[-20] max-sm:mt-0">
+    <div className="flex items-center justify-between align-middle mt-4 mb-8 max-sm:mt-0">
       <h1 className="inline-block">
         <Image
           className="inline-block mr-2"
