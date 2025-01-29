@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SessionProvider } from "next-auth/react";
 import { JotaiProvider } from "@/components/JotaiProvider";
+import type { ReactNode } from "react";
+import { Footer } from "@/components/Footer";
 
 import "./globals.css";
 
@@ -18,8 +20,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  todos,
 }: Readonly<{
   children: React.ReactNode;
+  todos: ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -34,7 +38,16 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SessionProvider>
-            <JotaiProvider>{children}</JotaiProvider>
+            <JotaiProvider>
+              <div className="min-h-screen p-8 sm:pt-2 sm:p-20 font-[family-name:var(--font-inter)]">
+                <main className="max-w-2xl mx-auto">
+                  {children}
+                  {todos}
+                </main>
+              </div>
+              <hr className="mb-2" />
+              <Footer />
+            </JotaiProvider>
           </SessionProvider>
         </ThemeProvider>
       </body>

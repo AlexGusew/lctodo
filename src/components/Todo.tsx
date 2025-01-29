@@ -12,7 +12,7 @@ import {
 import { ChevronUpDownIcon } from "@heroicons/react/24/solid";
 import { useDebouncedEffect } from "@/lib/useDebouncedEffect";
 import { endOfToday, isAfter, isBefore, startOfTomorrow } from "date-fns";
-import { useAtom, useAtomValue, type ExtractAtomValue } from "jotai";
+import { useAtom, type ExtractAtomValue } from "jotai";
 import { sectionOpen } from "@/state";
 
 interface TodoProps {
@@ -114,12 +114,6 @@ const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
     });
   };
 
-  useEffect(() => {
-    if (todos.length === 0 || todos.at(-1)?.title) {
-      addTodo();
-    }
-  }, [addTodo, todos]);
-
   const addDate = (id: string) => (value: number) => {
     setTodos((todos) => {
       const newTodos = todos.map((todo) => {
@@ -160,6 +154,7 @@ const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
   const futureTodos = todos.filter(
     (todo) => todo.date && isAfter(todo.date, endOfToday())
   );
+
   /**
    * - Done
    * - Date is not set or in past
@@ -168,6 +163,42 @@ const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
     (todo) =>
       todo.done && (!todo.date || isBefore(todo.date, startOfTomorrow()))
   );
+
+  useEffect(() => {
+    setTodos((todos) => {
+      const futureTodos = todos.filter(
+        (todo) => todo.date && isAfter(todo.date, endOfToday())
+      );
+      const inProgressTodos = todos.filter(
+        (todo) =>
+          !todo.done && (!todo.date || isBefore(todo.date, startOfTomorrow()))
+      );
+      if (inProgressTodos.length === 0 || inProgressTodos.at(-1)?.title) {
+        todos = [
+          ...todos,
+          {
+            id: crypto.randomUUID(),
+            title: "",
+            done: false,
+            tags: [],
+          },
+        ];
+      }
+      if (futureTodos.length === 0 || futureTodos.at(-1)?.title) {
+        todos = [
+          ...todos,
+          {
+            id: crypto.randomUUID(),
+            title: "",
+            done: false,
+            tags: [],
+            date: startOfTomorrow(),
+          },
+        ];
+      }
+      return todos;
+    });
+  }, [addTodo, todos]);
 
   function removeTodo(id: string): void {
     setTodos((todos) => todos.filter((todo) => todo.id !== id));
@@ -179,14 +210,21 @@ const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
       "In Progress",
       sectionOpenValue.inProgress,
       onOpenChange("inProgress"),
+      inProgressTodos.filter((todo) => !todo.title).length < 2,
     ],
-    [futureTodos, "Planned", sectionOpenValue.future, onOpenChange("future")],
-    [doneTodos, "Done", sectionOpenValue.done, onOpenChange("done")],
+    [
+      futureTodos,
+      "Planned",
+      sectionOpenValue.future,
+      onOpenChange("future"),
+      futureTodos.filter((todo) => !todo.title).length < 2,
+    ],
+    [doneTodos, "Done", sectionOpenValue.done, onOpenChange("done"), true],
   ] as const;
 
   return (
     <>
-      {allTodos.map(([todos, label, isOpen, onOpen]) => (
+      {allTodos.map(([todos, label, isOpen, onOpen, closeDisabled]) => (
         <Collapsible open={isOpen} key={label} onOpenChange={onOpen}>
           <CollapsibleTrigger>
             <h2 className="text-lg font-bold mt-14 mb-4 flex items-center gap-2">
@@ -198,6 +236,7 @@ const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
             <ul className="grid grid-cols-1 gap-8">
               {todos.map((todo) => (
                 <TodoItemComponent
+                  closeDisabled={!todo.title && closeDisabled}
                   key={todo.id.toString()}
                   todo={todo}
                   toggleTodo={toggleTodo(todo.id)}
