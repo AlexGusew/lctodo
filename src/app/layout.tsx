@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { JotaiProvider } from "@/components/JotaiProvider";
 import type { ReactNode } from "react";
 import { Footer } from "@/components/Footer";
+import { Analytics } from "@vercel/analytics/next";
 
 import "./globals.css";
 
@@ -50,6 +51,7 @@ export default function RootLayout({
             </JotaiProvider>
           </SessionProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
