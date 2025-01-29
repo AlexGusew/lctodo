@@ -8,7 +8,6 @@ import Image from "next/image";
 
 export default async function Home() {
   const session = (await auth()) as Session;
-  console.log({ session });
 
   session?.user?.todos.forEach((todo) => {
     todo.date = todo.date ? new Date(todo.date) : undefined;
@@ -19,7 +18,7 @@ export default async function Home() {
       <InitialLoad showTags={session.user?.showTags ?? false} />
       <div className="min-h-screen p-8 sm:pt-2 sm:p-20 font-[family-name:var(--font-inter)]">
         <main className="max-w-2xl mx-auto">
-          <div className="flex items-center justify-between align-middle mb-10 mt-4">
+          <div className="flex items-center justify-between align-middle mt-4 max-sm:mb-[-20] max-sm:mt-0">
             <h1 className="inline-block">
               <Image
                 className="inline-block mr-2"

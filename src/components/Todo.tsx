@@ -11,6 +11,9 @@ import {
 } from "@/components/ui/collapsible";
 import { ChevronUpDownIcon } from "@heroicons/react/24/solid";
 import { useDebouncedEffect } from "@/lib/useDebouncedEffect";
+import { endOfToday, isAfter, isBefore, startOfTomorrow } from "date-fns";
+import { useAtom, useAtomValue, type ExtractAtomValue } from "jotai";
+import { sectionOpen } from "@/state";
 
 interface TodoProps {
   todos?: TodoItem[];
@@ -20,6 +23,15 @@ interface TodoProps {
 
 const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
   const [todos, setTodos] = useState<TodoItem[]>(initialTodos);
+  const [sectionOpenValue, setSectionOpen] = useAtom(sectionOpen);
+
+  const onOpenChange =
+    (prop: keyof ExtractAtomValue<typeof sectionOpen>) => (isOpen: boolean) => {
+      setSectionOpen((s) => ({
+        ...s,
+        [prop]: isOpen,
+      }));
+    };
 
   useDebouncedEffect(
     () => {
@@ -134,65 +146,72 @@ const Todo = ({ todos: initialTodos = [], isAuth }: TodoProps) => {
     });
   };
 
-  const inProgressTodos = todos.filter((todo) => !todo.done);
-  const doneTodos = todos.filter((todo) => todo.done);
+  /**
+   * - Not done
+   * - No date or date today or in past
+   */
+  const inProgressTodos = todos.filter(
+    (todo) =>
+      !todo.done && (!todo.date || isBefore(todo.date, startOfTomorrow()))
+  );
+  /**
+   * - Date is tomorrow or later
+   */
+  const futureTodos = todos.filter(
+    (todo) => todo.date && isAfter(todo.date, endOfToday())
+  );
+  /**
+   * - Done
+   * - Date is not set or in past
+   */
+  const doneTodos = todos.filter(
+    (todo) =>
+      todo.done && (!todo.date || isBefore(todo.date, startOfTomorrow()))
+  );
 
   function removeTodo(id: string): void {
     setTodos((todos) => todos.filter((todo) => todo.id !== id));
   }
 
+  const allTodos = [
+    [
+      inProgressTodos,
+      "In Progress",
+      sectionOpenValue.inProgress,
+      onOpenChange("inProgress"),
+    ],
+    [futureTodos, "Planned", sectionOpenValue.future, onOpenChange("future")],
+    [doneTodos, "Done", sectionOpenValue.done, onOpenChange("done")],
+  ] as const;
+
   return (
     <>
-      <Collapsible defaultOpen>
-        <CollapsibleTrigger>
-          <h2 className="text-lg font-bold mt-8 mb-4 flex items-center gap-2">
-            In Progress
-            <ChevronUpDownIcon className="size-4 translate-y-[0.07rem] opacity-70" />
-          </h2>
-        </CollapsibleTrigger>
-        <CollapsibleContent>
-          <ul className="grid grid-cols-1 gap-8">
-            {inProgressTodos.map((todo) => (
-              <TodoItemComponent
-                key={todo.id.toString()}
-                todo={todo}
-                toggleTodo={toggleTodo(todo.id)}
-                handleDateChange={handleDateChange(todo.id)}
-                addDate={addDate(todo.id)}
-                onSetSelectedValue={onSetSelectedValue(todo.id)}
-                removeTodo={() => removeTodo(todo.id)}
-                onSetSearchValue={onSetSearchValue(todo.id)}
-              />
-            ))}
-          </ul>
-        </CollapsibleContent>
-        {!!doneTodos.length && (
-          <Collapsible defaultOpen>
-            <CollapsibleTrigger>
-              <h2 className="text-lg font-bold mt-8 mb-4 flex items-center gap-2">
-                Done{" "}
-                <ChevronUpDownIcon className="size-4 translate-y-[0.07rem] opacity-70" />
-              </h2>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <ul className="grid grid-cols-1 gap-8">
-                {doneTodos.map((todo) => (
-                  <TodoItemComponent
-                    key={todo.id.toString()}
-                    todo={todo}
-                    toggleTodo={toggleTodo(todo.id)}
-                    handleDateChange={handleDateChange(todo.id)}
-                    addDate={addDate(todo.id)}
-                    onSetSelectedValue={onSetSelectedValue(todo.id)}
-                    removeTodo={() => removeTodo(todo.id)}
-                    onSetSearchValue={onSetSearchValue(todo.id)}
-                  />
-                ))}
-              </ul>
-            </CollapsibleContent>
-          </Collapsible>
-        )}
-      </Collapsible>
+      {allTodos.map(([todos, label, isOpen, onOpen]) => (
+        <Collapsible open={isOpen} key={label} onOpenChange={onOpen}>
+          <CollapsibleTrigger>
+            <h2 className="text-lg font-bold mt-14 mb-4 flex items-center gap-2">
+              {label}
+              <ChevronUpDownIcon className="size-4 translate-y-[0.07rem] opacity-70" />
+            </h2>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <ul className="grid grid-cols-1 gap-8">
+              {todos.map((todo) => (
+                <TodoItemComponent
+                  key={todo.id.toString()}
+                  todo={todo}
+                  toggleTodo={toggleTodo(todo.id)}
+                  handleDateChange={handleDateChange(todo.id)}
+                  addDate={addDate(todo.id)}
+                  onSetSelectedValue={onSetSelectedValue(todo.id)}
+                  removeTodo={() => removeTodo(todo.id)}
+                  onSetSearchValue={onSetSearchValue(todo.id)}
+                />
+              ))}
+            </ul>
+          </CollapsibleContent>
+        </Collapsible>
+      ))}
     </>
   );
 };
