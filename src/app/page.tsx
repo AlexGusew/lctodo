@@ -7,12 +7,12 @@ export default async function Home() {
       <h1 className="inline-block">
         <Image
           className="inline-block mr-2"
-          src="/lc-logo.webp"
-          width={24}
-          height={24}
+          src="/logo.svg"
+          width={20}
+          height={20}
           alt="LeetCode logo"
         />
-        LcTodo
+        Lc Todo
       </h1>
       <TopBar />
     </div>
