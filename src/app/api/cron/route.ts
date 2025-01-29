@@ -23,11 +23,6 @@ const setQID = async (QID: string) => {
       body: JSON.stringify({
         items: [
           {
-            operation: "create",
-            key: "example_key_1",
-            value: "example_value_1",
-          },
-          {
             operation: "update",
             key: "dailyQID",
             value: QID,
@@ -81,19 +76,19 @@ query questionOfToday {
     }),
   });
   const data = (await rawData.json()) as DailyDto;
-  console.dir({ data }, { depth: null });
   const id =
     data?.data?.activeDailyCodingChallengeQuestion?.question
       ?.frontendQuestionId;
-  console.log({ id });
+  console.log({ QID: id });
   return id;
 };
 
-export async function GET(req: NextRequest) {
-  if (
-    req.headers.get("Authorization") !== `Bearer ${process.env.CRON_SECRET}`
-  ) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get("authorization");
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response("Unauthorized", {
+      status: 401,
+    });
   }
   const QID = await getLeetCodeDailyQID();
   if (!QID) {
