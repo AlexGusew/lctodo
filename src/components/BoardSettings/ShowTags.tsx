@@ -8,7 +8,6 @@ import { changeShowTags } from "@/actions/problems";
 
 export const ShowTags = () => {
   const [isShowTags, setShowTags] = useAtom(showTagsAtom);
-  console.log({ isShowTags });
 
   return (
     <DropdownMenuItem

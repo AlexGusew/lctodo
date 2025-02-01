@@ -1,18 +1,19 @@
 import { getDailyQuestion } from "@/actions/problems";
-import type { Session } from "@/app/types";
+import type { Question, Session } from "@/app/types";
 import { Actions } from "@/components/Actions";
 import { InitialLoad } from "@/components/InitialLoad";
 import Todo from "@/components/Todo";
 import { auth } from "@/lib/auth";
 
 export default async function Todos() {
-  const session = (await auth()) as Session;
+  const [dailyQuestion, session] = (await Promise.all([
+    getDailyQuestion(),
+    auth(),
+  ])) as [Question, Session];
 
   session?.user?.todos.forEach((todo) => {
     todo.date = todo.date ? new Date(todo.date) : undefined;
   });
-
-  const dailyQuestion = await getDailyQuestion();
 
   return (
     <>
@@ -22,11 +23,7 @@ export default async function Todos() {
         layout={session.user?.layout}
       />
       <Actions dailyQuestion={dailyQuestion ?? undefined} />
-      <Todo
-        isAuth={!!session}
-        dailyQuestion={dailyQuestion ?? undefined}
-        layout={session.user?.layout}
-      />
+      <Todo isAuth={!!session} dailyQuestion={dailyQuestion ?? undefined} />
     </>
   );
 }

@@ -1,13 +1,16 @@
+"use client";
 // Source from https://learnersbucket.com/examples/interview/useresponsive-hook-in-react/
+
+// TODO: Change to https://github.com/vercel/next.js/discussions/14810#discussioncomment-61177
 
 import { useEffect, useState } from "react";
 import { useDebounceCallback } from "usehooks-ts";
 
 export const useResponsive = () => {
   const [state, setState] = useState({
-    isMobile: window.innerWidth <= 768,
-    isTablet: window.innerWidth >= 768 && window.innerWidth <= 990,
-    isDesktop: window.innerWidth > 990,
+    isMobile: false,
+    isTablet: false,
+    isDesktop: false,
   });
 
   useEffect(() => {

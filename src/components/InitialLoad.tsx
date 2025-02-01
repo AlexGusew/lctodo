@@ -1,7 +1,7 @@
 "use client";
 
 import type { TodoItem } from "@/app/types";
-import { layoutAtom, showTagsAtom, todosAtom } from "@/state";
+import { rawLayoutAtom, showTagsAtom, todosAtom } from "@/state";
 import { Layout } from "@prisma/client";
 import { useHydrateAtoms } from "jotai/utils";
 
@@ -19,7 +19,7 @@ export const InitialLoad = ({
   useHydrateAtoms([
     [todosAtom, todos],
     [showTagsAtom, showTags],
-    [layoutAtom, layout],
+    [rawLayoutAtom, layout],
   ] as const);
 
   return null;

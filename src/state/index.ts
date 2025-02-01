@@ -20,14 +20,20 @@ export const isDailyDoneAtom = atom(false);
  * col - 1 column
  * row - 1 row
  */
-export const rawLayoutAtom = atom<Layout>(
+export const rawLayoutAtom = atom(
   (globalThis?.localStorage?.getItem("layout") as Layout) ?? Layout.row
 );
 
 export const layoutAtom = atom(
   (get) => get(rawLayoutAtom),
-  (get, set, newStr: Layout) => {
-    globalThis?.localStorage.setItem("layout", newStr);
-    set(rawLayoutAtom, newStr);
+  (get, set) => {
+    const cur = get(rawLayoutAtom);
+    const newLayout = {
+      [Layout.col]: Layout.row,
+      [Layout.row]: Layout.col,
+    }[cur];
+    globalThis?.localStorage?.setItem("layout", newLayout);
+    set(rawLayoutAtom, newLayout);
+    return newLayout;
   }
 );

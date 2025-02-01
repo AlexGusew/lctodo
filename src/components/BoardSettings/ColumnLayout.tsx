@@ -13,14 +13,8 @@ export const ColumnLayout = () => {
   const { isDesktop } = useResponsive();
 
   const onClick = () => {
-    setLayout((layout) => {
-      const newLayout = {
-        [Layout.col]: Layout.row,
-        [Layout.row]: Layout.col,
-      }[layout];
-      changeLayout(newLayout);
-      return newLayout;
-    });
+    const newLayout = setLayout();
+    changeLayout(newLayout);
   };
 
   if (!isDesktop) return null;

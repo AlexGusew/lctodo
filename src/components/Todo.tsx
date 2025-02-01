@@ -18,12 +18,11 @@ import {
   startOfToday,
   startOfTomorrow,
 } from "date-fns";
-import { useAtom, useAtomValue, type ExtractAtomValue } from "jotai";
-import { isDailyDoneAtom, layoutAtom, sectionOpen, todosAtom } from "@/state";
+import { useAtom, type ExtractAtomValue } from "jotai";
+import { isDailyDoneAtom, sectionOpen, todosAtom } from "@/state";
 import { TodosByDate } from "@/components/TodosByDate";
 import { useColumnLayout } from "@/lib/useColumnLayout";
 import { ResponsiveLayout } from "@/components/ResponsiveLayout";
-import { DevTools } from "jotai-devtools";
 
 interface TodoProps {
   todos?: TodoItem[];
@@ -49,13 +48,9 @@ const ColumnHeader = ({
 
 const Todo = ({ isAuth, dailyQuestion }: TodoProps) => {
   const isColumnLayout = useColumnLayout();
-
   const [todos, setTodos] = useAtom(todosAtom);
   const [sectionOpenValue, setSectionOpen] = useAtom(sectionOpen);
   const [, setIsDailyDone] = useAtom(isDailyDoneAtom);
-  const layout = useAtomValue(layoutAtom);
-  console.log("from server", layout);
-  debugger;
 
   const onOpenChange =
     (prop: keyof ExtractAtomValue<typeof sectionOpen>) => (isOpen: boolean) => {
