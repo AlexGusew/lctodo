@@ -196,9 +196,9 @@ const Todo = ({ isAuth, dailyQuestion }: TodoProps) => {
 
   useEffect(() => {
     setTodos((todos) => {
-      const futureTodos = todos.filter(
-        (todo) => todo.date && isAfter(todo.date, endOfToday())
-      );
+      // const futureTodos = todos.filter(
+      //   (todo) => todo.date && isAfter(todo.date, endOfToday())
+      // );
       const inProgressTodos = todos.filter(
         (todo) =>
           !todo.done && (!todo.date || isBefore(todo.date, startOfTomorrow()))
@@ -214,18 +214,18 @@ const Todo = ({ isAuth, dailyQuestion }: TodoProps) => {
           },
         ];
       }
-      if (futureTodos.length === 0 || futureTodos.at(-1)?.title) {
-        todos = [
-          ...todos,
-          {
-            id: crypto.randomUUID(),
-            title: "",
-            done: false,
-            tags: [],
-            date: startOfTomorrow(),
-          },
-        ];
-      }
+      // if (futureTodos.length === 0 || futureTodos.at(-1)?.title) {
+      //   todos = [
+      //     ...todos,
+      //     {
+      //       id: crypto.randomUUID(),
+      //       title: "",
+      //       done: false,
+      //       tags: [],
+      //       date: startOfTomorrow(),
+      //     },
+      //   ];
+      // }
       return todos;
     });
   }, [addTodo, setTodos, todos]);
