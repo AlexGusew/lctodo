@@ -20,7 +20,7 @@ export default async function Todos() {
       <InitialLoad
         todos={session?.user?.todos}
         showTags={session?.user?.showTags}
-        layout={session.user?.layout}
+        layout={session?.user?.layout}
       />
       <Actions dailyQuestion={dailyQuestion ?? undefined} />
       <Todo isAuth={!!session} dailyQuestion={dailyQuestion ?? undefined} />
