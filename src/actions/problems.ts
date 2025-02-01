@@ -6,7 +6,7 @@ import allQuestions from "@/../public/questions.json";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { cache } from "react";
-import type { Prisma } from "@prisma/client";
+import type { Layout, Prisma } from "@prisma/client";
 import { get } from "@vercel/edge-config";
 
 const questionsById = (allQuestions as Question[]).reduce((acc, question) => {
@@ -80,6 +80,16 @@ export async function changeShowTags(showTags: boolean) {
   await prisma.user.update({
     where: { id: session.userId },
     data: { showTags },
+  });
+}
+
+export async function changeLayout(layout: Layout) {
+  const session = (await auth()) as Session;
+  if (!session?.user?.email) return;
+
+  await prisma.user.update({
+    where: { id: session.userId },
+    data: { layout },
   });
 }
 

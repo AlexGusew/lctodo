@@ -1,15 +1,26 @@
 "use client";
 
-import { showTagsAtom } from "@/state";
-import { useAtom } from "jotai";
-import { useEffect } from "react";
+import type { TodoItem } from "@/app/types";
+import { layoutAtom, showTagsAtom, todosAtom } from "@/state";
+import { Layout } from "@prisma/client";
+import { useHydrateAtoms } from "jotai/utils";
 
-export const InitialLoad = ({ showTags }: { showTags: boolean }) => {
-  const [, setShowTags] = useAtom(showTagsAtom);
+interface InitialLoadProps {
+  todos?: TodoItem[];
+  showTags?: boolean;
+  layout?: Layout;
+}
 
-  useEffect(() => {
-    setShowTags(showTags);
-  }, [setShowTags, showTags]);
+export const InitialLoad = ({
+  showTags = false,
+  todos = [],
+  layout = Layout.row,
+}: InitialLoadProps) => {
+  useHydrateAtoms([
+    [todosAtom, todos],
+    [showTagsAtom, showTags],
+    [layoutAtom, layout],
+  ] as const);
 
   return null;
 };

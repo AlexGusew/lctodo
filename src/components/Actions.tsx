@@ -2,6 +2,7 @@
 
 import type { Question, TodoItem } from "@/app/types";
 import { BoardSettings } from "@/components/BoardSettings";
+import { ResponsiveLayout } from "@/components/ResponsiveLayout";
 import { Button } from "@/components/ui/button";
 import { isDailyDoneAtom, todosAtom } from "@/state";
 import { FireIcon as FilledFireIcon } from "@heroicons/react/24/solid";
@@ -32,18 +33,20 @@ export const Actions = ({ dailyQuestion }: ActionsProps) => {
   };
 
   return (
-    <div className="flex justify-end">
-      <BoardSettings />
-      <Button className="ml-auto" variant={"outline"} onClick={onClick}>
-        Add daily
-        <FilledFireIcon
-          className={`transition-all ${
-            isDailyDone
-              ? "animate-bounce animate-custom-bounce fill-orange-500"
-              : "opacity-50"
-          }`}
-        />
-      </Button>
-    </div>
+    <ResponsiveLayout>
+      <div className="flex justify-end">
+        <BoardSettings />
+        <Button className="ml-auto" variant={"outline"} onClick={onClick}>
+          Add daily
+          <FilledFireIcon
+            className={`transition-all ${
+              isDailyDone
+                ? "animate-bounce animate-custom-bounce fill-orange-500"
+                : "opacity-50"
+            }`}
+          />
+        </Button>
+      </div>
+    </ResponsiveLayout>
   );
 };

@@ -16,12 +16,16 @@ export default async function Todos() {
 
   return (
     <>
-      <InitialLoad showTags={session?.user?.showTags ?? false} />
+      <InitialLoad
+        todos={session?.user?.todos}
+        showTags={session?.user?.showTags}
+        layout={session.user?.layout}
+      />
       <Actions dailyQuestion={dailyQuestion ?? undefined} />
       <Todo
-        todos={session?.user?.todos ?? []}
         isAuth={!!session}
         dailyQuestion={dailyQuestion ?? undefined}
+        layout={session.user?.layout}
       />
     </>
   );

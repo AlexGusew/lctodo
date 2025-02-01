@@ -1,3 +1,4 @@
+import type { Layout } from "@prisma/client";
 import type { DefaultSession } from "next-auth";
 
 export interface Session extends DefaultSession {
@@ -5,6 +6,7 @@ export interface Session extends DefaultSession {
   user?: {
     showTags: boolean;
     todos: TodoItem[];
+    layout: Layout;
   } & DefaultSession["user"];
 }
 

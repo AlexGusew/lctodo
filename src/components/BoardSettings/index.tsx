@@ -2,12 +2,12 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import { ShowTags } from "@/components/BoardSettings/ShowTags";
 import { CollapseAll } from "@/components/BoardSettings/CollapseAll";
+import { ColumnLayout } from "@/components/BoardSettings/ColumnLayout";
 
 export const BoardSettings = () => {
   return (
@@ -20,6 +20,7 @@ export const BoardSettings = () => {
       <DropdownMenuContent align="start" className="min-w-36">
         <ShowTags />
         <CollapseAll />
+        <ColumnLayout />
       </DropdownMenuContent>
     </DropdownMenu>
   );

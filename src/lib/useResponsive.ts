@@ -5,9 +5,9 @@ import { useDebounceCallback } from "usehooks-ts";
 
 export const useResponsive = () => {
   const [state, setState] = useState({
-    isMobile: false,
-    isTablet: false,
-    isDesktop: false,
+    isMobile: window.innerWidth <= 768,
+    isTablet: window.innerWidth >= 768 && window.innerWidth <= 990,
+    isDesktop: window.innerWidth > 990,
   });
 
   useEffect(() => {

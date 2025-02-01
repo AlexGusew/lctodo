@@ -11,11 +11,19 @@ import {
 } from "@/components/ui/collapsible";
 import { ChevronUpDownIcon } from "@heroicons/react/24/solid";
 import { useDebouncedEffect } from "@/lib/useDebouncedEffect";
-import { endOfToday, isAfter, isBefore, startOfTomorrow } from "date-fns";
-import { useAtom, type ExtractAtomValue } from "jotai";
-import { isDailyDoneAtom, sectionOpen, todosAtom } from "@/state";
-import { useHydrateAtoms } from "jotai/utils";
+import {
+  endOfToday,
+  isAfter,
+  isBefore,
+  startOfToday,
+  startOfTomorrow,
+} from "date-fns";
+import { useAtom, useAtomValue, type ExtractAtomValue } from "jotai";
+import { isDailyDoneAtom, layoutAtom, sectionOpen, todosAtom } from "@/state";
 import { TodosByDate } from "@/components/TodosByDate";
+import { useColumnLayout } from "@/lib/useColumnLayout";
+import { ResponsiveLayout } from "@/components/ResponsiveLayout";
+import { DevTools } from "jotai-devtools";
 
 interface TodoProps {
   todos?: TodoItem[];
@@ -24,16 +32,30 @@ interface TodoProps {
   dailyQuestion?: Question;
 }
 
-const Todo = ({
-  todos: initialTodos = [],
-  isAuth,
-  dailyQuestion,
-}: TodoProps) => {
-  useHydrateAtoms([[todosAtom, initialTodos]]);
+const ColumnHeader = ({
+  collapsed,
+  label,
+}: {
+  collapsed: boolean;
+  label: string;
+}) => (
+  <CollapsibleTrigger className={`w-full ${collapsed ? "opacity-60" : ""}`}>
+    <h2 className="font-bold text-xl mt-12 mb-4 flex items-center gap-2 w-full">
+      {label}
+      <ChevronUpDownIcon className="size-4 translate-y-[0.07rem] opacity-70" />
+    </h2>
+  </CollapsibleTrigger>
+);
+
+const Todo = ({ isAuth, dailyQuestion }: TodoProps) => {
+  const isColumnLayout = useColumnLayout();
 
   const [todos, setTodos] = useAtom(todosAtom);
   const [sectionOpenValue, setSectionOpen] = useAtom(sectionOpen);
   const [, setIsDailyDone] = useAtom(isDailyDoneAtom);
+  const layout = useAtomValue(layoutAtom);
+  console.log("from server", layout);
+  debugger;
 
   const onOpenChange =
     (prop: keyof ExtractAtomValue<typeof sectionOpen>) => (isOpen: boolean) => {
@@ -118,7 +140,11 @@ const Todo = ({
           if (todo.QID === dailyQuestion?.QID) {
             setIsDailyDone(true);
           }
-          return { ...todo, done: !todo.done };
+          return {
+            ...todo,
+            done: !todo.done,
+            date: startOfToday(),
+          };
         }
         return todo;
       });
@@ -213,106 +239,114 @@ const Todo = ({
     setTodos((todos) => todos.filter((todo) => todo.id !== id));
   }
 
-  return (
-    <div className="">
-      <Collapsible
-        open={sectionOpenValue.inProgress}
-        onOpenChange={onOpenChange("inProgress")}
-      >
-        <CollapsibleTrigger>
-          <h2 className="text-xl font-bold mt-12 mb-4 flex items-center gap-2">
-            In Progress
-            <ChevronUpDownIcon className="size-4 translate-y-[0.07rem] opacity-70" />
-          </h2>
-        </CollapsibleTrigger>
-        <CollapsibleContent>
-          <ul className="grid grid-cols-1 gap-2">
-            {inProgressTodos.map((todo) => (
-              <TodoItemComponent
-                closeDisabled={
-                  !todo.title &&
-                  inProgressTodos.filter((todo) => !todo.title).length < 2
-                }
-                key={todo.id.toString()}
-                todo={todo}
-                toggleTodo={toggleTodo(todo.id)}
-                handleDateChange={handleDateChange(todo.id)}
-                addDate={addDate(todo.id)}
-                onSetSelectedValue={onSetSelectedValue(todo.id)}
-                removeTodo={() => removeTodo(todo.id)}
-                onSetSearchValue={onSetSearchValue(todo.id)}
-              />
-            ))}
-          </ul>
-        </CollapsibleContent>
-      </Collapsible>
-
-      <Collapsible
-        open={sectionOpenValue.future}
-        onOpenChange={onOpenChange("future")}
-      >
-        <CollapsibleTrigger>
-          <h2 className="text-xl font-bold mt-12 mb-4 flex items-center gap-2">
-            Planned
-            <ChevronUpDownIcon className="size-4 translate-y-[0.07rem] opacity-70" />
-          </h2>
-        </CollapsibleTrigger>
-        <CollapsibleContent>
-          <TodosByDate
-            todos={futureTodos}
-            renderTodo={(todo) => (
-              <TodoItemComponent
-                closeDisabled={
-                  !todo.title &&
-                  futureTodos.filter((todo) => !todo.title).length < 2
-                }
-                key={todo.id.toString()}
-                todo={todo}
-                toggleTodo={toggleTodo(todo.id)}
-                handleDateChange={handleDateChange(todo.id)}
-                addDate={addDate(todo.id)}
-                onSetSelectedValue={onSetSelectedValue(todo.id)}
-                removeTodo={() => removeTodo(todo.id)}
-                onSetSearchValue={onSetSearchValue(todo.id)}
-              />
-            )}
-          />
-        </CollapsibleContent>
-      </Collapsible>
-
-      <Collapsible
-        open={sectionOpenValue.done}
-        onOpenChange={onOpenChange("done")}
-      >
-        <CollapsibleTrigger>
-          <h2 className="text-xl font-bold mt-12 mb-4 flex items-center gap-2">
-            Done
-            <ChevronUpDownIcon className="size-4 translate-y-[0.07rem] opacity-70" />
-          </h2>
-        </CollapsibleTrigger>
-        <CollapsibleContent>
-          <TodosByDate
-            todos={doneTodos}
-            increasing={false}
-            renderTodo={(todo) => (
-              <TodoItemComponent
-                closeDisabled
-                showDatePicker={false}
-                key={todo.id.toString()}
-                todo={todo}
-                toggleTodo={toggleTodo(todo.id)}
-                handleDateChange={handleDateChange(todo.id)}
-                addDate={addDate(todo.id)}
-                onSetSelectedValue={onSetSelectedValue(todo.id)}
-                removeTodo={() => removeTodo(todo.id)}
-                onSetSearchValue={onSetSearchValue(todo.id)}
-              />
-            )}
-          />
-        </CollapsibleContent>
-      </Collapsible>
-    </div>
+  const inProgressNode = (
+    <Collapsible
+      open={sectionOpenValue.inProgress}
+      onOpenChange={onOpenChange("inProgress")}
+    >
+      <ColumnHeader
+        label="In Progress"
+        collapsed={!sectionOpenValue.inProgress}
+      />
+      <CollapsibleContent>
+        <ul className="grid grid-cols-1 gap-2">
+          {inProgressTodos.map((todo) => (
+            <TodoItemComponent
+              closeDisabled={
+                !todo.title &&
+                inProgressTodos.filter((todo) => !todo.title).length < 2
+              }
+              key={todo.id.toString()}
+              todo={todo}
+              toggleTodo={toggleTodo(todo.id)}
+              handleDateChange={handleDateChange(todo.id)}
+              addDate={addDate(todo.id)}
+              onSetSelectedValue={onSetSelectedValue(todo.id)}
+              removeTodo={() => removeTodo(todo.id)}
+              onSetSearchValue={onSetSearchValue(todo.id)}
+            />
+          ))}
+        </ul>
+      </CollapsibleContent>
+    </Collapsible>
   );
+
+  const futureNodes = (
+    <Collapsible
+      open={sectionOpenValue.future}
+      onOpenChange={onOpenChange("future")}
+    >
+      <ColumnHeader label="Planned" collapsed={!sectionOpenValue.future} />
+      <CollapsibleContent>
+        <TodosByDate
+          todos={futureTodos}
+          renderTodo={(todo) => (
+            <TodoItemComponent
+              closeDisabled={
+                !todo.title &&
+                futureTodos.filter((todo) => !todo.title).length < 2
+              }
+              key={todo.id.toString()}
+              todo={todo}
+              toggleTodo={toggleTodo(todo.id)}
+              handleDateChange={handleDateChange(todo.id)}
+              addDate={addDate(todo.id)}
+              onSetSelectedValue={onSetSelectedValue(todo.id)}
+              removeTodo={() => removeTodo(todo.id)}
+              onSetSearchValue={onSetSearchValue(todo.id)}
+            />
+          )}
+        />
+      </CollapsibleContent>
+    </Collapsible>
+  );
+
+  const doneNodes = (
+    <Collapsible
+      open={sectionOpenValue.done}
+      onOpenChange={onOpenChange("done")}
+    >
+      <ColumnHeader label="Done" collapsed={!sectionOpenValue.done} />
+      <CollapsibleContent>
+        <TodosByDate
+          todos={doneTodos}
+          increasing={false}
+          renderTodo={(todo) => (
+            <TodoItemComponent
+              closeDisabled
+              showDatePicker={false}
+              key={todo.id.toString()}
+              todo={todo}
+              toggleTodo={toggleTodo(todo.id)}
+              handleDateChange={handleDateChange(todo.id)}
+              addDate={addDate(todo.id)}
+              onSetSelectedValue={onSetSelectedValue(todo.id)}
+              removeTodo={() => removeTodo(todo.id)}
+              onSetSearchValue={onSetSearchValue(todo.id)}
+            />
+          )}
+        />
+      </CollapsibleContent>
+    </Collapsible>
+  );
+
+  if (isColumnLayout) {
+    return (
+      <div className="grid grid-cols-3 gap-8 max-w-7xl mx-auto">
+        {inProgressNode}
+        {futureNodes}
+        {doneNodes}
+      </div>
+    );
+  } else {
+    return (
+      <ResponsiveLayout>
+        {inProgressNode}
+        {futureNodes}
+        {doneNodes}
+      </ResponsiveLayout>
+    );
+  }
 };
 
 export default Todo;
