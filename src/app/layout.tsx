@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/next";
 
 import "./globals.css";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const geistSans = Inter({
   variable: "--font-inter",
@@ -40,14 +41,16 @@ export default function RootLayout({
         >
           <SessionProvider>
             <JotaiProvider>
-              <div className="min-h-screen p-8 sm:pt-2 sm:p-20 font-[family-name:var(--font-inter)]">
-                <main className="max-w-2xl mx-auto">
-                  {children}
-                  {todos}
-                </main>
-              </div>
-              <hr className="mb-2" />
-              <Footer />
+              <TooltipProvider>
+                <div className="min-h-screen p-8 max-sm:p-4 font-[family-name:var(--font-inter)]">
+                  <main className="max-w-2xl mx-auto">
+                    {children}
+                    {todos}
+                  </main>
+                </div>
+                <hr className="mb-2" />
+                <Footer />
+              </TooltipProvider>
             </JotaiProvider>
           </SessionProvider>
         </ThemeProvider>

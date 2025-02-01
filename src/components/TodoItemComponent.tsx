@@ -1,6 +1,10 @@
 import { CheckCircleIcon as CheckCircleIconSolid } from "@heroicons/react/24/solid";
-import { CheckCircleIcon as CheckCircleIconOutline } from "@heroicons/react/24/outline";
-import { LinkIcon } from "@heroicons/react/24/outline";
+import {
+  CheckCircleIcon as CheckCircleIconOutline,
+  ChevronDoubleRightIcon,
+  ChevronRightIcon,
+} from "@heroicons/react/24/outline";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import TodoDatePicker from "@/components/TodoDatePicker";
 import { Button } from "@/components/ui/button";
@@ -16,6 +20,11 @@ import { DifficultyChip } from "@/components/ui/DifficultyChip";
 import { useResponsive } from "@/lib/useResponsive";
 import { useAtomValue } from "jotai";
 import { showTagsAtom } from "@/state";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface TodoItemComponentProps {
   todo: TodoItem;
@@ -26,6 +35,7 @@ interface TodoItemComponentProps {
   removeTodo: () => void;
   onSetSearchValue: (value: string) => void;
   closeDisabled: boolean;
+  showDatePicker?: boolean;
 }
 
 const TodoItemComponent = ({
@@ -37,6 +47,7 @@ const TodoItemComponent = ({
   removeTodo,
   onSetSearchValue,
   closeDisabled,
+  showDatePicker = true,
 }: TodoItemComponentProps) => {
   const datesWrapperRef = useRef<HTMLParagraphElement>(null);
   const { isMobile } = useResponsive();
@@ -77,13 +88,13 @@ const TodoItemComponent = ({
         target="_blank"
         rel="noopener noreferrer"
       >
-        <LinkIcon className="size-4" />
+        <ArrowTopRightOnSquareIcon className="size-4" />
       </a>
     </Button>
   ) : null;
 
   return (
-    <li>
+    <li className="border rounded-2xl p-4">
       <div className="flex gap-2 items-center">
         <Button
           variant={"ghost"}
@@ -107,7 +118,7 @@ const TodoItemComponent = ({
               onSetSelectedValue(s);
             }}
             selectedId={todo.QID}
-            emptyMessage="Search by problem number or title"
+            emptyMessage="Search by problem number, title or URL"
             isLoading={isLoading}
           />
           {!isMobile && link}
@@ -116,10 +127,10 @@ const TodoItemComponent = ({
           <Button
             variant={"ghost"}
             size={"icon"}
-            className="disabled:opacity-40 rounded-full shrink-0 size-8"
+            className="disabled:opacity-40 shrink-0"
             onClick={removeTodo}
           >
-            <XMarkIcon className=" dark:text-gray-400" />
+            <XMarkIcon />
           </Button>
         )}
       </div>
@@ -141,37 +152,46 @@ const TodoItemComponent = ({
             ))}
         </div>
       )}
-      <p
-        className="text-gray-500 dark:text-gray-400 text-sm flex flex-row space-x-1 items-center"
-        ref={datesWrapperRef}
-      >
-        <TodoDatePicker
-          selected={todo.date}
-          onSelect={handleDateChange}
-          datesWrapperRef={
-            datesWrapperRef as React.RefObject<HTMLParagraphElement>
-          }
-        />
-        {todo.date &&
-          (
-            [
-              ["+1d", 1],
-              ["+1w", 7],
-            ] as const
-          ).map(([label, value]) => (
-            <Button
-              key={value}
-              variant={`ghost`}
-              size={"icon"}
-              onClick={() => addDate(value)}
-              className={
-                (!todo.date ? "opacity-0 pointer-events-none" : "") + ""
-              }
-            >
-              {label}
-            </Button>
-          ))}
-      </p>
+
+      {showDatePicker && (
+        <p
+          className="text-gray-500 dark:text-gray-400 text-sm flex flex-row space-x-1 items-center"
+          ref={datesWrapperRef}
+        >
+          <TodoDatePicker
+            selected={todo.date}
+            onSelect={handleDateChange}
+            datesWrapperRef={
+              datesWrapperRef as React.RefObject<HTMLParagraphElement>
+            }
+          />
+          {todo.date &&
+            (
+              [
+                [<ChevronRightIcon key={1} />, "Delay problem for 1 day", 1],
+                [
+                  <ChevronDoubleRightIcon key={2} />,
+                  "Delay problem for 1 week",
+                  7,
+                ],
+              ] as const
+            ).map(([icon, tooltip, value]) => (
+              <Tooltip key={tooltip + value}>
+                <TooltipTrigger asChild>
+                  <Button
+                    key={value}
+                    variant={`ghost`}
+                    size={"icon"}
+                    onClick={() => addDate(value)}
+                  >
+                    {icon}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>{tooltip}</TooltipContent>
+              </Tooltip>
+            ))}
+        </p>
+      )}
     </li>
   );
 };

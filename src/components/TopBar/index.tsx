@@ -6,12 +6,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
-import { ShowTags } from "@/components/TopBar/ShowTags";
-import { CollapseAll } from "@/components/TopBar/CollapseAll";
 
 export default function SignIn() {
   return (
@@ -40,9 +37,6 @@ const User = ({ name }: { name: string }) => (
       <Button variant="link">{name}</Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" className="min-w-36">
-      <ShowTags />
-      <CollapseAll />
-      <DropdownMenuSeparator />
       <DropdownMenuItem
         onClick={async () => {
           "use server";

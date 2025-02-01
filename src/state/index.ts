@@ -3,7 +3,7 @@
 import type { TodoItem } from "@/app/types";
 import { atom } from "jotai";
 
-export const showTagsAtom = atom(true);
+export const showTagsAtom = atom(false);
 
 export const sectionOpen = atom({
   done: true,

@@ -1,12 +1,16 @@
 import { Button } from "@/components/ui/button";
 
 export const Footer = () => (
-  <footer className="px-8 sm:px-20">
+  <footer className="px-8 sm:px-20 my-2">
     <div className="max-w-2xl mx-auto">
       {[
         ["alexcoders.com", "https://alexcoders.com"],
         ["View on Github", "https://github.com/AlexGusew/lctodo"],
-        ["Roadmap", "https://github.com/users/AlexGusew/projects/2"],
+        ["Backlog", "https://github.com/users/AlexGusew/projects/2"],
+        [
+          "Report bug / Request feature",
+          "https://github.com/AlexGusew/lctodo/issues/new?template=feature_request.md",
+        ],
       ].map(([label, href]) => (
         <Button
           key={label + href}

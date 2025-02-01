@@ -17,6 +17,21 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { CalendarIcon as SolidCalendarIcon } from "@heroicons/react/24/solid";
 
+export const getDisplayDate = (date: Date | undefined) => {
+  if (!date) return "";
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+
+  if (format(date, "yyyy-MM-dd") === format(today, "yyyy-MM-dd")) {
+    return "Today";
+  } else if (format(date, "yyyy-MM-dd") === format(tomorrow, "yyyy-MM-dd")) {
+    return "Tomorrow";
+  } else {
+    return format(date, "eee, dd MMMM");
+  }
+};
+
 type TodoDatePickerProps = Pick<
   DayPickerSingleProps,
   "selected" | "onSelect"
@@ -33,21 +48,6 @@ const TodoDatePicker = ({
   const handleSelect: DayPickerSingleProps["onSelect"] = (...props) => {
     onSelect?.(...props);
     setIsOpen(false);
-  };
-
-  const getDisplayDate = (date: Date | undefined) => {
-    if (!date) return "";
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-
-    if (format(date, "yyyy-MM-dd") === format(today, "yyyy-MM-dd")) {
-      return "Today";
-    } else if (format(date, "yyyy-MM-dd") === format(tomorrow, "yyyy-MM-dd")) {
-      return "Tomorrow";
-    } else {
-      return format(date, "eee, dd MMMM");
-    }
   };
 
   const calendar = (

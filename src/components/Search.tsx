@@ -42,7 +42,7 @@ export function AutoComplete<T extends DefaultItem>({
   items = [],
   isLoading,
   emptyMessage = "No items.",
-  placeholder = "Search...",
+  placeholder = "Type problem",
 }: Props<T>) {
   const [open, setOpen] = useState(false);
 
