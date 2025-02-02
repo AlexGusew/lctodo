@@ -7,19 +7,19 @@ import type { ReactNode } from "react";
 import { Footer } from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/next";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ClientProviders } from "@/components/ClientProviders";
 
 import "jotai-devtools/styles.css";
 import "./globals.css";
-import { ClientProviders } from "@/components/ClientProviders";
 
-const geistSans = Inter({
+const InterVariable = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "LeetCode Todo list",
-  description: "A simple todo list",
+  title: "LeetCode Todo List",
+  description: "A simple todo List",
 };
 
 export default function RootLayout({
@@ -34,7 +34,7 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
-      <body className={`${geistSans.variable} antialiased dark`}>
+      <body className={`${InterVariable.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

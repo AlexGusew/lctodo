@@ -100,3 +100,13 @@ export async function getDailyQuestion() {
   }
   return questionsById[QID] ?? null;
 }
+
+export async function changeDisableAnimations(disableAnimations: boolean) {
+  const session = (await auth()) as Session;
+  if (!session?.user?.email) return;
+
+  await prisma.user.update({
+    where: { id: session.userId },
+    data: { disableAnimations },
+  });
+}

@@ -13,20 +13,20 @@ enum Layout {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  username      String?   @unique
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  todos         Json      @default("[]")
-  showTags      Boolean   @default(true)
-  layout        Layout    @default(row)
-
+  id                String          @id @default(cuid())
+  name              String?
+  username          String?         @unique
+  email             String?         @unique
+  emailVerified     DateTime?
+  image             String?
+  accounts          Account[]
+  sessions          Session[]
+  todos             Json            @default("[]")
+  showTags          Boolean         @default(true)
+  layout            Layout          @default(row)
+  disableAnimations Boolean         @default(false)
   // Optional for WebAuthn support
-  Authenticator Authenticator[]
+  Authenticator     Authenticator[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

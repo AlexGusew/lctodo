@@ -1,5 +1,6 @@
 import type { TodoItem } from "@/app/types";
 import { getDisplayDate } from "@/components/TodoDatePicker";
+import { AnimatePresence } from "motion/react";
 import { Fragment, useMemo, type ReactNode } from "react";
 
 interface TodosByDateProps {
@@ -40,9 +41,9 @@ export const TodosByDate = ({
   const mapTodos = (todos: TodoItem[]) => {
     return (
       <ul className="grid grid-cols-1 gap-2">
-        {todos.map((todo) => (
-          <Fragment key={todo.id}>{renderTodo(todo)}</Fragment>
-        ))}
+        <AnimatePresence initial={false}>
+          {todos.map(renderTodo)}
+        </AnimatePresence>
       </ul>
     );
   };

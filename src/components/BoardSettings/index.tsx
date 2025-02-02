@@ -8,6 +8,7 @@ import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import { ShowTags } from "@/components/BoardSettings/ShowTags";
 import { CollapseAll } from "@/components/BoardSettings/CollapseAll";
 import { ColumnLayout } from "@/components/BoardSettings/ColumnLayout";
+import { DisableAnimations } from "@/components/BoardSettings/DisableAnimations";
 
 export const BoardSettings = () => {
   return (
@@ -21,6 +22,7 @@ export const BoardSettings = () => {
         <ShowTags />
         <CollapseAll />
         <ColumnLayout />
+        <DisableAnimations />
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -7,6 +7,7 @@ export interface Session extends DefaultSession {
     showTags: boolean;
     todos: TodoItem[];
     layout: Layout;
+    disableAnimations: boolean;
   } & DefaultSession["user"];
 }
 

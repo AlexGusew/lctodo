@@ -9,7 +9,7 @@ export default async function Todos() {
   const [dailyQuestion, session] = (await Promise.all([
     getDailyQuestion(),
     auth(),
-  ])) as [Question, Session];
+  ])) as [Question | null, Session | null];
 
   session?.user?.todos.forEach((todo) => {
     todo.date = todo.date ? new Date(todo.date) : undefined;
@@ -21,6 +21,7 @@ export default async function Todos() {
         todos={session?.user?.todos}
         showTags={session?.user?.showTags}
         layout={session?.user?.layout}
+        disableAnimations={session?.user?.disableAnimations}
       />
       <Actions dailyQuestion={dailyQuestion ?? undefined} />
       <Todo isAuth={!!session} dailyQuestion={dailyQuestion ?? undefined} />

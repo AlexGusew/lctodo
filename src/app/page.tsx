@@ -9,12 +9,12 @@ export default async function Home() {
         <h1 className="inline-block">
           <Image
             className="inline-block mr-2"
-            src="/logo.svg"
+            src="/logo-dark.svg"
             width={20}
             height={20}
             alt="LeetCode logo"
           />
-          Lc Todo
+          LC Todo
         </h1>
         <TopBar />
       </div>
