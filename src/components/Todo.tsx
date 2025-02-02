@@ -23,6 +23,7 @@ import { isDailyDoneAtom, sectionOpen, todosAtom } from "@/state";
 import { TodosByDate } from "@/components/TodosByDate";
 import { useColumnLayout } from "@/lib/useColumnLayout";
 import { ResponsiveLayout } from "@/components/ResponsiveLayout";
+import { AnimatedItem } from "@/components/Animated";
 
 interface TodoProps {
   todos?: TodoItem[];
@@ -246,20 +247,21 @@ const Todo = ({ isAuth, dailyQuestion }: TodoProps) => {
       <CollapsibleContent>
         <ul className="grid grid-cols-1 gap-2">
           {inProgressTodos.map((todo) => (
-            <TodoItemComponent
-              closeDisabled={
-                !todo.title &&
-                inProgressTodos.filter((todo) => !todo.title).length < 2
-              }
-              key={todo.id.toString()}
-              todo={todo}
-              toggleTodo={toggleTodo(todo.id)}
-              handleDateChange={handleDateChange(todo.id)}
-              addDate={addDate(todo.id)}
-              onSetSelectedValue={onSetSelectedValue(todo.id)}
-              removeTodo={() => removeTodo(todo.id)}
-              onSetSearchValue={onSetSearchValue(todo.id)}
-            />
+            <AnimatedItem key={todo.id.toString()}>
+              <TodoItemComponent
+                closeDisabled={
+                  !todo.title &&
+                  inProgressTodos.filter((todo) => !todo.title).length < 2
+                }
+                todo={todo}
+                toggleTodo={toggleTodo(todo.id)}
+                handleDateChange={handleDateChange(todo.id)}
+                addDate={addDate(todo.id)}
+                onSetSelectedValue={onSetSelectedValue(todo.id)}
+                removeTodo={() => removeTodo(todo.id)}
+                onSetSearchValue={onSetSearchValue(todo.id)}
+              />
+            </AnimatedItem>
           ))}
         </ul>
       </CollapsibleContent>
@@ -276,20 +278,22 @@ const Todo = ({ isAuth, dailyQuestion }: TodoProps) => {
         <TodosByDate
           todos={futureTodos}
           renderTodo={(todo) => (
-            <TodoItemComponent
-              closeDisabled={
-                !todo.title &&
-                futureTodos.filter((todo) => !todo.title).length < 2
-              }
-              key={todo.id.toString()}
-              todo={todo}
-              toggleTodo={toggleTodo(todo.id)}
-              handleDateChange={handleDateChange(todo.id)}
-              addDate={addDate(todo.id)}
-              onSetSelectedValue={onSetSelectedValue(todo.id)}
-              removeTodo={() => removeTodo(todo.id)}
-              onSetSearchValue={onSetSearchValue(todo.id)}
-            />
+            <AnimatedItem key={todo.id.toString()}>
+              <TodoItemComponent
+                closeDisabled={
+                  !todo.title &&
+                  futureTodos.filter((todo) => !todo.title).length < 2
+                }
+                key={todo.id.toString()}
+                todo={todo}
+                toggleTodo={toggleTodo(todo.id)}
+                handleDateChange={handleDateChange(todo.id)}
+                addDate={addDate(todo.id)}
+                onSetSelectedValue={onSetSelectedValue(todo.id)}
+                removeTodo={() => removeTodo(todo.id)}
+                onSetSearchValue={onSetSearchValue(todo.id)}
+              />
+            </AnimatedItem>
           )}
         />
       </CollapsibleContent>
@@ -307,18 +311,20 @@ const Todo = ({ isAuth, dailyQuestion }: TodoProps) => {
           todos={doneTodos}
           increasing={false}
           renderTodo={(todo) => (
-            <TodoItemComponent
-              closeDisabled
-              showDatePicker={false}
-              key={todo.id.toString()}
-              todo={todo}
-              toggleTodo={toggleTodo(todo.id)}
-              handleDateChange={handleDateChange(todo.id)}
-              addDate={addDate(todo.id)}
-              onSetSelectedValue={onSetSelectedValue(todo.id)}
-              removeTodo={() => removeTodo(todo.id)}
-              onSetSearchValue={onSetSearchValue(todo.id)}
-            />
+            <AnimatedItem key={todo.id.toString()}>
+              <TodoItemComponent
+                closeDisabled
+                showDatePicker={false}
+                key={todo.id.toString()}
+                todo={todo}
+                toggleTodo={toggleTodo(todo.id)}
+                handleDateChange={handleDateChange(todo.id)}
+                addDate={addDate(todo.id)}
+                onSetSelectedValue={onSetSelectedValue(todo.id)}
+                removeTodo={() => removeTodo(todo.id)}
+                onSetSearchValue={onSetSearchValue(todo.id)}
+              />
+            </AnimatedItem>
           )}
         />
       </CollapsibleContent>
