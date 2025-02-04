@@ -1,7 +1,9 @@
 import { getDailyQuestion } from "@/actions/problems";
 import { Actions } from "@/components/Actions";
 import { InitialLoad } from "@/components/InitialLoad";
+import { ResponsiveLayout } from "@/components/ResponsiveLayout";
 import Todos from "@/components/Todos";
+import { TodosLayout } from "@/components/TodosLayout";
 import { getCurrentSession } from "@/lib/auth";
 
 export default async function TodosPage() {
@@ -18,8 +20,15 @@ export default async function TodosPage() {
         layout={user?.layout}
         disableAnimations={user?.disableAnimations}
       />
-      <Actions dailyQuestion={dailyQuestion ?? undefined} />
-      <Todos isAuth={!!session} dailyQuestion={dailyQuestion ?? undefined} />
+      <ResponsiveLayout>
+        <Actions dailyQuestion={dailyQuestion ?? undefined} />
+        <TodosLayout>
+          <Todos
+            isAuth={!!session}
+            dailyQuestion={dailyQuestion ?? undefined}
+          />
+        </TodosLayout>
+      </ResponsiveLayout>
     </>
   );
 }

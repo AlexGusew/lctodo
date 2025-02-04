@@ -1,5 +1,15 @@
 [
   {
+    "id": "747786e0-bf39-4cba-b575-639ba00794cd",
+    "QID": "1800",
+    "date": "2025-02-04T00:00:00.000Z",
+    "done": false,
+    "tags": ["Array"],
+    "title": "Maximum Ascending Subarray Sum",
+    "titleSlug": "maximum-ascending-subarray-sum",
+    "difficulty": "Easy"
+  },
+  {
     "id": "39d34f04-8cb3-4967-970c-72164c51010b",
     "QID": "3151",
     "date": "2025-02-01T00:00:00.000Z",
@@ -103,6 +113,7 @@
   },
   {
     "id": "8181670b-d5c3-4b5c-8782-4fe780ecd4ef",
+    "date": "2025-02-05T00:00:00.000Z",
     "done": false,
     "tags": ["Array"],
     "title": "57. Insert Interval",
@@ -137,7 +148,7 @@
   },
   {
     "id": "e73e9d9b-971b-4d76-a813-284cd0cf808a",
-    "date": "2025-02-02T00:00:00.000Z",
+    "date": "2025-02-05T00:00:00.000Z",
     "done": false,
     "tags": ["Array", "Dynamic Programming", "Bit Manipulation"],
     "title": "2836. Maximize Value of Function in a Ball Passing Game",
@@ -222,7 +233,7 @@
   {
     "id": "b794d146-f49e-4706-a66d-ae7c15622c8b",
     "QID": "986",
-    "date": "2025-02-02T00:00:00.000Z",
+    "date": "2025-02-05T00:00:00.000Z",
     "done": false,
     "tags": ["Array", "Two Pointers", "Line Sweep"],
     "title": "986. Interval List Intersections",
@@ -232,7 +243,7 @@
   {
     "id": "82f11a32-910c-41e3-b0a5-7998ed26d194",
     "QID": "759",
-    "date": "2025-02-02T00:00:00.000Z",
+    "date": "2025-02-05T00:00:00.000Z",
     "done": false,
     "tags": ["Array", "Sorting", "Heap (Priority Queue)"],
     "title": "759. Employee Free Time",
@@ -256,7 +267,7 @@
   {
     "id": "8046faca-2b2b-497a-bffa-62075fd50865",
     "QID": "992",
-    "date": "2025-02-01T00:00:00.000Z",
+    "date": "2025-02-05T00:00:00.000Z",
     "done": false,
     "tags": ["Array", "Hash Table", "Sliding Window", "Counting"],
     "title": "992. Subarrays with K Different Integers",
@@ -264,15 +275,9 @@
     "difficulty": "Hard"
   },
   {
-    "id": "873c81a7-cf93-42bb-af24-846dd5056aec",
-    "date": "2025-02-02T00:00:00.000Z",
-    "done": false,
-    "tags": [],
-    "title": ""
-  },
-  {
     "id": "f8b3c16d-97a6-419b-9733-1f546a982ba4",
     "QID": "1834",
+    "date": "2025-02-04T00:00:00.000Z",
     "done": false,
     "tags": ["Array", "Sorting", "Heap (Priority Queue)"],
     "title": "1834. Single-Threaded CPU",
@@ -281,6 +286,36 @@
   },
   {
     "id": "042eb03a-dea2-4924-8a20-9fff6fbb0e23",
+    "QID": "3105",
+    "date": "2025-02-04T00:00:00.000Z",
+    "done": true,
+    "tags": ["Array"],
+    "title": "3105. Longest Strictly Increasing or Strictly Decreasing Subarray",
+    "titleSlug": "longest-strictly-increasing-or-strictly-decreasing-subarray",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "4087427e-b632-44a6-a760-4e5cd5a77ab8",
+    "QID": "1752",
+    "date": "2025-02-04T00:00:00.000Z",
+    "done": true,
+    "tags": ["Array"],
+    "title": "1752. Check if Array Is Sorted and Rotated",
+    "titleSlug": "check-if-array-is-sorted-and-rotated",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "2667487c-8aed-4b01-9937-b20b6539b66e",
+    "QID": "243",
+    "date": "2025-02-04T00:00:00.000Z",
+    "done": true,
+    "tags": ["Array", "String"],
+    "title": "243. Shortest Word Distance",
+    "titleSlug": "shortest-word-distance",
+    "difficulty": "Easy"
+  },
+  {
+    "id": "68cf64df-1924-460b-82bc-ebac3687210c",
     "done": false,
     "tags": [],
     "title": ""

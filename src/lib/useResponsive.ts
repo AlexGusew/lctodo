@@ -6,20 +6,12 @@
 import { useEffect, useState } from "react";
 import { useDebounceCallback } from "usehooks-ts";
 
-const LOCALSTORAGE_KEY = "is-desktop";
-
 export const useResponsive = () => {
   const [state, setState] = useState(() => {
-    let isDesktop: boolean = false;
-
-    if (typeof window !== "undefined") {
-      isDesktop = !!localStorage.getItem(LOCALSTORAGE_KEY);
-    }
-
     return {
       isMobile: false,
       isTablet: false,
-      isDesktop: !!isDesktop,
+      isDesktop: false,
     };
   });
 
@@ -36,11 +28,6 @@ export const useResponsive = () => {
     const isMobile = window.innerWidth <= 768;
     const isTablet = window.innerWidth >= 768 && window.innerWidth <= 990;
     const isDesktop = window.innerWidth > 990;
-    if (isDesktop) {
-      localStorage.setItem(LOCALSTORAGE_KEY, "true");
-    } else {
-      localStorage.removeItem(LOCALSTORAGE_KEY);
-    }
     setState({ isMobile, isTablet, isDesktop });
   };
 

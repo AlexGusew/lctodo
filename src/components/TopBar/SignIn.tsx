@@ -3,12 +3,14 @@
 import { Button } from "@/components/ui/button";
 import { todosAtom } from "@/state";
 import { useAtomValue } from "jotai";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useState } from "react";
 
 export default function SignIn() {
   const todos = useAtomValue(todosAtom);
   const [isLoading, setIsLoading] = useState(false);
+  const theme = useTheme();
 
   return (
     <form
@@ -26,7 +28,11 @@ export default function SignIn() {
         className={isLoading ? "animate-pulse" : ""}
       >
         <Image
-          src="/github-mark-white.svg"
+          src={
+            theme.resolvedTheme === "light"
+              ? "github-mark.svg"
+              : "/github-mark-white.svg"
+          }
           alt="GitHub logo"
           width={24}
           height={24}

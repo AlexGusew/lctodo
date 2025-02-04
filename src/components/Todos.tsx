@@ -341,23 +341,13 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
     </Collapsible>
   );
 
-  if (isColumnLayout) {
-    return (
-      <div className="grid grid-cols-3 gap-8 max-w-7xl mx-auto">
-        {inProgressNode}
-        {futureNodes}
-        {doneNodes}
-      </div>
-    );
-  } else {
-    return (
-      <ResponsiveLayout>
-        {inProgressNode}
-        {futureNodes}
-        {doneNodes}
-      </ResponsiveLayout>
-    );
-  }
+  return (
+    <>
+      {inProgressNode}
+      {futureNodes}
+      {doneNodes}
+    </>
+  );
 };
 
 export default Todos;

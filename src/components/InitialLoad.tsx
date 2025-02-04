@@ -18,6 +18,7 @@ interface InitialLoadProps {
   showTags?: boolean;
   layout?: Layout;
   disableAnimations?: boolean;
+  isAuth?: boolean;
 }
 
 export const InitialLoad = ({
@@ -25,6 +26,7 @@ export const InitialLoad = ({
   todos: serverTodos = [],
   layout = Layout.row,
   disableAnimations = false,
+  isAuth,
 }: InitialLoadProps) => {
   const setTodos = useSetAtom(todosAtom);
   const { toast } = useToast();
@@ -37,7 +39,7 @@ export const InitialLoad = ({
 
   useEffect(() => {
     const rawTodos = localStorage.getItem("todos");
-    if (!serverTodos.length && rawTodos) {
+    if (!serverTodos.length && rawTodos && isAuth) {
       const todos = JSON.parse(rawTodos);
       todos.forEach((todo: TodoItem) => {
         if (todo.date) {
@@ -54,7 +56,7 @@ export const InitialLoad = ({
       setTodos(serverTodos);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isAuth]);
 
   return null;
 };

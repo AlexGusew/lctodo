@@ -1,5 +1,3 @@
-"use client";
-
 import { TodoItem } from "@/app/types";
 import { Layout } from "@prisma/client";
 import { atom } from "jotai";
@@ -21,9 +19,7 @@ export const isDailyDoneAtom = atom(false);
  * col - 1 column
  * row - 1 row
  */
-export const rawLayoutAtom = atom(
-  (globalThis?.localStorage?.getItem("layout") as Layout) ?? Layout.row
-);
+export const rawLayoutAtom = atom<Layout>(Layout.row);
 
 export const layoutAtom = atom(
   (get) => get(rawLayoutAtom),
@@ -33,7 +29,6 @@ export const layoutAtom = atom(
       [Layout.col]: Layout.row,
       [Layout.row]: Layout.col,
     }[cur];
-    globalThis?.localStorage?.setItem("layout", newLayout);
     set(rawLayoutAtom, newLayout);
     return newLayout;
   }

@@ -12,9 +12,9 @@ export const ColumnLayout = () => {
   const [layout, setLayout] = useAtom(layoutAtom);
   const { isDesktop } = useResponsive();
 
-  const onClick = () => {
+  const onClick = async () => {
     const newLayout = setLayout();
-    changeLayout(newLayout);
+    await changeLayout(newLayout);
   };
 
   if (!isDesktop) return null;
