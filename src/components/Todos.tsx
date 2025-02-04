@@ -28,6 +28,7 @@ import {
 import { TodosByDate } from "@/components/TodosByDate";
 import { AnimatedItem } from "@/components/AnimatedItem";
 import { AnimatePresence } from "motion/react";
+import { Button } from "@/components/ui/button";
 
 interface TodoProps {
   isAuth: boolean;
@@ -41,11 +42,14 @@ const ColumnHeader = ({
   collapsed: boolean;
   label: string;
 }) => (
-  <CollapsibleTrigger className={`w-full ${collapsed ? "opacity-60" : ""}`}>
-    <h2 className="font-bold text-xl mt-12 mb-4 flex items-center gap-2 w-full">
+  <CollapsibleTrigger className={collapsed ? "opacity-60" : ""} asChild>
+    <Button
+      variant={"ghost"}
+      className="font-bold text-xl mt-12 mb-4 flex items-center gap-2 p-0 hover:bg-none"
+    >
       {label}
       <ChevronUpDownIcon className="size-4 translate-y-[0.07rem] opacity-70" />
-    </h2>
+    </Button>
   </CollapsibleTrigger>
 );
 

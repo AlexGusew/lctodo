@@ -16,11 +16,11 @@ model User {
   id Int @id @default(autoincrement())
 
   // Github
-  githubId        BigInt @unique
+  githubId        BigInt  @unique
   githubUsername  String
   githubAvatarUrl String
-  githubName      String
-  githubEmail     String
+  githubName      String?
+  githubEmail     String?
 
   // Business 
   todos             Json    @default("[]")

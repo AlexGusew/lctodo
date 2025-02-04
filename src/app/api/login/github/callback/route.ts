@@ -65,6 +65,34 @@ export async function GET(request: Request): Promise<Response> {
     });
   }
 
+  if (!userDto.githubEmail) {
+    const emailListRequest = new Request("https://api.github.com/user/emails");
+    emailListRequest.headers.set(
+      "Authorization",
+      `Bearer ${tokens.accessToken()}`
+    );
+    const emailListResponse = await fetch(emailListRequest);
+    const emailListResult: unknown = await emailListResponse.json();
+    if (!Array.isArray(emailListResult) || emailListResult.length < 1) {
+      return new Response("Please restart the process.", {
+        status: 400,
+      });
+    }
+
+    for (const emailRecord of emailListResult) {
+      const primaryEmail = emailRecord.primary;
+      const verifiedEmail = emailRecord.verified;
+      if (primaryEmail && verifiedEmail) {
+        userDto.githubEmail = emailRecord.email;
+      }
+    }
+    if (userDto.githubEmail === null) {
+      return new Response("Please verify your GitHub email address.", {
+        status: 400,
+      });
+    }
+  }
+
   const user = await createGithubUser(userDto);
 
   const sessionToken = generateSessionToken();

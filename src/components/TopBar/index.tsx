@@ -27,5 +27,9 @@ const User = ({ name }: { name: string }) => (
 
 export const TopBar = async () => {
   const { user } = await getCurrentSession();
-  return user?.githubName ? <User name={user?.githubName} /> : <SignIn />;
+  return user ? (
+    <User name={user.githubName ?? user.githubUsername ?? user.githubEmail} />
+  ) : (
+    <SignIn />
+  );
 };

@@ -19,6 +19,7 @@ export default async function TodosPage() {
         showTags={user?.showTags}
         layout={user?.layout}
         disableAnimations={user?.disableAnimations}
+        isAuth={!!session}
       />
       <ResponsiveLayout>
         <Actions dailyQuestion={dailyQuestion ?? undefined} />
