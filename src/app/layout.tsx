@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/next";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ClientProviders } from "@/components/ClientProviders";
+import { Toaster } from "@/components/ui/toaster";
 
 import "jotai-devtools/styles.css";
 import "./globals.css";
@@ -51,12 +52,12 @@ export default function RootLayout({
                 </div>
                 <hr className="mb-2" />
                 <Footer />
+                <Toaster />
               </TooltipProvider>
             </JotaiProvider>
           </ClientProviders>
         </ThemeProvider>
         <Analytics />
-        {children}
       </body>
     </html>
   );

@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { todosAtom } from "@/state";
 import { useAtomValue } from "jotai";
 import Image from "next/image";
-import { redirect } from "next/navigation";
 
 export default function SignIn() {
   const todos = useAtomValue(todosAtom);
@@ -14,7 +13,7 @@ export default function SignIn() {
       onSubmit={async (e) => {
         e.preventDefault();
         localStorage.setItem("todos", JSON.stringify(todos));
-        redirect("/api/login/github");
+        window.location.href = "/api/login/github";
       }}
     >
       <Button type="submit" variant={"link"}>

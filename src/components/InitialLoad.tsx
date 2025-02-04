@@ -1,7 +1,6 @@
 "use client";
 
 import type { TodoItem } from "@/app/types";
-import { prepareUser } from "@/db/User";
 import {
   disableAnimationsAtom,
   rawLayoutAtom,
@@ -12,6 +11,7 @@ import { Layout } from "@prisma/client";
 import { useSetAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import { useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface InitialLoadProps {
   todos?: TodoItem[];
@@ -27,6 +27,7 @@ export const InitialLoad = ({
   disableAnimations = false,
 }: InitialLoadProps) => {
   const setTodos = useSetAtom(todosAtom);
+  const { toast } = useToast();
 
   useHydrateAtoms([
     [showTagsAtom, showTags],
@@ -45,6 +46,10 @@ export const InitialLoad = ({
       });
       setTodos(todos);
       localStorage.removeItem("todos");
+      toast({
+        title: "Todos were saved",
+        description: "Welcome to LC Todo!",
+      });
     } else {
       setTodos(serverTodos);
     }
