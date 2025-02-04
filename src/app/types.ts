@@ -1,15 +1,4 @@
-import type { Layout } from "@prisma/client";
-import type { DefaultSession } from "next-auth";
-
-export interface Session extends DefaultSession {
-  userId: string;
-  user?: {
-    showTags: boolean;
-    todos: TodoItem[];
-    layout: Layout;
-    disableAnimations: boolean;
-  } & DefaultSession["user"];
-}
+import type { User } from "@prisma/client";
 
 export interface TodoItem {
   id: string;
@@ -28,4 +17,17 @@ export interface Question {
   titleSlug: string;
   difficulty: "Easy" | "Medium" | "Hard";
   topicTags: string[];
+}
+
+export type GithubUser = Pick<
+  User,
+  | "githubId"
+  | "githubAvatarUrl"
+  | "githubEmail"
+  | "githubName"
+  | "githubUsername"
+>;
+
+export interface PreparedUser extends Omit<User, "todos"> {
+  todos: TodoItem[];
 }

@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `User` ADD COLUMN `showTags` BOOLEAN NOT NULL DEFAULT true;

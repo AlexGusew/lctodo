@@ -32,9 +32,7 @@ import { AnimatedItem } from "@/components/AnimatedItem";
 import { AnimatePresence } from "motion/react";
 
 interface TodoProps {
-  todos?: TodoItem[];
   isAuth: boolean;
-  questionsById?: Record<string, Question>;
   dailyQuestion?: Question;
 }
 
@@ -53,7 +51,7 @@ const ColumnHeader = ({
   </CollapsibleTrigger>
 );
 
-const Todo = ({ isAuth, dailyQuestion }: TodoProps) => {
+const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
   const isColumnLayout = useColumnLayout();
   const [todos, setTodos] = useAtom(todosAtom);
   const [sectionOpenValue, setSectionOpen] = useAtom(sectionOpen);
@@ -362,4 +360,4 @@ const Todo = ({ isAuth, dailyQuestion }: TodoProps) => {
   }
 };
 
-export default Todo;
+export default Todos;

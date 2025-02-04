@@ -1,7 +1,4 @@
-import { auth, signOut } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import { signIn } from "@/lib/auth";
-import Image from "next/image";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,27 +6,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
-
-export default function SignIn() {
-  return (
-    <form
-      action={async () => {
-        "use server";
-        await signIn("github");
-      }}
-    >
-      <Button type="submit" variant={"link"}>
-        <Image
-          src="/github-mark-white.svg"
-          alt="GitHub logo"
-          width={24}
-          height={24}
-        />
-        Sign in with GitHub
-      </Button>
-    </form>
-  );
-}
+import { getCurrentSession, logout } from "@/lib/auth";
+import SignIn from "@/components/TopBar/SignIn";
 
 const User = ({ name }: { name: string }) => (
   <DropdownMenu>
@@ -37,12 +15,7 @@ const User = ({ name }: { name: string }) => (
       <Button variant="link">{name}</Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" className="min-w-36">
-      <DropdownMenuItem
-        onClick={async () => {
-          "use server";
-          await signOut();
-        }}
-      >
+      <DropdownMenuItem onClick={logout}>
         Sign out
         <ArrowLeftStartOnRectangleIcon className="ml-auto" />
       </DropdownMenuItem>
@@ -51,6 +24,6 @@ const User = ({ name }: { name: string }) => (
 );
 
 export const TopBar = async () => {
-  const session = await auth();
-  return session?.user?.name ? <User name={session.user.name} /> : <SignIn />;
+  const { user } = await getCurrentSession();
+  return user?.githubName ? <User name={user?.githubName} /> : <SignIn />;
 };

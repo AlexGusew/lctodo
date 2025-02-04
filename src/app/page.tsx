@@ -8,7 +8,7 @@ export default async function Home() {
       <div className="flex items-center justify-between align-middle mt-4 mb-8 max-sm:mt-0">
         <h1 className="inline-block">
           <Image
-            className="inline-block mr-2"
+            className="inline-block mr-2 h-[revert-layer]"
             src="/logo-dark.svg"
             width={20}
             height={20}

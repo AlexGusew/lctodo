@@ -13,81 +13,32 @@ enum Layout {
 }
 
 model User {
-  id                String          @id @default(cuid())
-  name              String?
-  username          String?         @unique
-  email             String?         @unique
-  emailVerified     DateTime?
-  image             String?
-  accounts          Account[]
-  sessions          Session[]
-  todos             Json            @default("[]")
-  showTags          Boolean         @default(true)
-  layout            Layout          @default(row)
-  disableAnimations Boolean         @default(false)
-  // Optional for WebAuthn support
-  Authenticator     Authenticator[]
+  id Int @id @default(autoincrement())
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+  // Github
+  githubId        BigInt @unique
+  githubUsername  String
+  githubAvatarUrl String
+  githubName      String
+  githubEmail     String
 
-model Account {
-  id                       String  @id @default(cuid())
-  userId                   String  @unique
-  type                     String
-  provider                 String
-  providerAccountId        String
-  refresh_token            String? @db.Text
-  access_token             String? @db.Text
-  expires_at               Int?
-  token_type               String?
-  scope                    String?
-  id_token                 String? @db.Text
-  session_state            String?
-  refresh_token_expires_in Int?
-  user                     User?   @relation(fields: [userId], references: [id])
+  // Business 
+  todos             Json    @default("[]")
+  showTags          Boolean @default(true)
+  layout            Layout  @default(row)
+  disableAnimations Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([provider, providerAccountId])
-  @@index([userId])
+  sessions Session[]
 }
 
 model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id])
+  id     String @id
+  userId Int
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
 
-  @@index([userId])
-}
-
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
-
-// Optional for WebAuthn support
-model Authenticator {
-  credentialID         String  @unique
-  userId               String
-  providerAccountId    String
-  credentialPublicKey  String
-  counter              Int
-  credentialDeviceType String
-  credentialBackedUp   Boolean
-  transports           String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@id([userId, credentialID])
+  expiresAt DateTime
 }

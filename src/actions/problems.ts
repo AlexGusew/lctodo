@@ -1,13 +1,13 @@
 "use server";
 
-import type { Question, Session, TodoItem } from "@/app/types";
+import type { Question, TodoItem } from "@/app/types";
 import Fuse, { type FuseResult } from "fuse.js";
 import allQuestions from "@/../public/questions.json";
-import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/db/prisma";
 import { cache } from "react";
 import type { Layout, Prisma } from "@prisma/client";
 import { get } from "@vercel/edge-config";
+import { getCurrentSession } from "@/lib/auth";
 
 const questionsById = (allQuestions as Question[]).reduce((acc, question) => {
   acc[question.QID] = question;
@@ -62,51 +62,47 @@ export const getSuggestions = cache(
 );
 
 export async function saveTodo(todos: TodoItem[]): Promise<void> {
-  // Extending TS Session interface is broken
-  // See https://github.com/nextauthjs/next-auth/issues/6640
-  const session = (await auth()) as Session;
-  if (!session?.user?.email) return;
+  const { user } = await getCurrentSession();
+  if (!user) return;
 
   await prisma.user.update({
-    where: { id: session.userId },
+    where: { id: user.id },
     data: { todos: todos as unknown as Prisma.JsonArray },
   });
 }
 
 export async function changeShowTags(showTags: boolean) {
-  const session = (await auth()) as Session;
-  if (!session?.user?.email) return;
+  const { user } = await getCurrentSession();
+  if (!user) return;
 
   await prisma.user.update({
-    where: { id: session.userId },
+    where: { id: user.id },
     data: { showTags },
   });
 }
 
 export async function changeLayout(layout: Layout) {
-  const session = (await auth()) as Session;
-  if (!session?.user?.email) return;
+  const { user } = await getCurrentSession();
+  if (!user) return;
 
   await prisma.user.update({
-    where: { id: session.userId },
+    where: { id: user.id },
     data: { layout },
   });
 }
 
 export async function getDailyQuestion() {
   const QID = await get<string>("dailyQID");
-  if (!QID) {
-    return null;
-  }
+  if (!QID) return null;
   return questionsById[QID] ?? null;
 }
 
 export async function changeDisableAnimations(disableAnimations: boolean) {
-  const session = (await auth()) as Session;
-  if (!session?.user?.email) return;
+  const { user } = await getCurrentSession();
+  if (!user) return;
 
   await prisma.user.update({
-    where: { id: session.userId },
+    where: { id: user.id },
     data: { disableAnimations },
   });
 }
