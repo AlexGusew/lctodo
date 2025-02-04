@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Alex Gusev", url: "https://alexcoders.com" }],
   openGraph: {
-    title: "LC Todo - The Ultimate LeetCode Todo List",
+    title: "LC Todo - LeetCode Todo List",
     description:
       "Organize your LeetCode tasks efficiently with LC Todo. The perfect tool for aspiring coders and developers.",
     url: "https://lctodo.alexcoders.com",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "LC Todo - The Ultimate LeetCode Todo List",
+    title: "LC Todo - LeetCode Todo List",
     description:
       "Organize your LeetCode tasks efficiently with LC Todo. The perfect tool for aspiring coders and developers.",
     site: "@AlexCoders",
