@@ -26,8 +26,6 @@ import {
   todosAtom,
 } from "@/state";
 import { TodosByDate } from "@/components/TodosByDate";
-import { useColumnLayout } from "@/lib/useColumnLayout";
-import { ResponsiveLayout } from "@/components/ResponsiveLayout";
 import { AnimatedItem } from "@/components/AnimatedItem";
 import { AnimatePresence } from "motion/react";
 
@@ -52,7 +50,6 @@ const ColumnHeader = ({
 );
 
 const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
-  const isColumnLayout = useColumnLayout();
   const [todos, setTodos] = useAtom(todosAtom);
   const [sectionOpenValue, setSectionOpen] = useAtom(sectionOpen);
   const [, setIsDailyDone] = useAtom(isDailyDoneAtom);
