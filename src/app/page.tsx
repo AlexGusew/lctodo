@@ -2,6 +2,11 @@ import { ResponsiveLayout } from "@/components/ResponsiveLayout";
 import { TopBar } from "@/components/TopBar";
 import Image from "next/image";
 
+/**
+ * TODO: Enable experimental_ppr
+ * export const experimental_ppr = true;
+ */
+
 export default async function Home() {
   return (
     <ResponsiveLayout>
@@ -12,7 +17,7 @@ export default async function Home() {
             src="/logo-dark.svg"
             width={20}
             height={20}
-            alt="LeetCode logo"
+            alt="LC Todd logo"
           />
           LC Todo
         </h1>

@@ -6,7 +6,7 @@ const getBackgroundColorClass = (difficulty: Question["difficulty"]) =>
   ({
     Easy: "bg-green-500",
     Medium: "bg-orange-500",
-    Hard: "bg-red-500",
+    Hard: "bg-rose-500",
   }[difficulty] ?? "bg-gray-500");
 
 export const DifficultyChip = ({
@@ -18,7 +18,7 @@ export const DifficultyChip = ({
     <span
       className={cn(
         getBackgroundColorClass(difficulty),
-        "text-white px-2 rounded-full py-0.5 text-xs flex items-center justify-center"
+        "text-zinc-900 px-2 rounded-full py-0.5 text-xs flex items-center justify-center"
       )}
     >
       {difficulty}

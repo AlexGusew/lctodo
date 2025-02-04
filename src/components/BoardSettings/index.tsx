@@ -14,11 +14,11 @@ export const BoardSettings = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size={"icon"}>
+        <Button variant="outline" size={"icon"} aria-label="Board settings">
           <Cog6ToothIcon className="size-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="min-w-36">
+      <DropdownMenuContent align="start" className="min-w-44">
         <ShowTags />
         <CollapseAll />
         <ColumnLayout />

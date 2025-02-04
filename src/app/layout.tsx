@@ -8,6 +8,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ClientProviders } from "@/components/ClientProviders";
 import { Toaster } from "@/components/ui/toaster";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import "jotai-devtools/styles.css";
 import "./globals.css";
@@ -18,8 +19,36 @@ const InterVariable = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "LeetCode Todo List",
-  description: "A simple todo List",
+  title: "LC Todo - LeetCode Todo List",
+  description:
+    "Organize your LeetCode tasks efficiently with LC Todo. Perfect tool for aspiring coders and developers to keep track of their coding problems and solutions.",
+  metadataBase: new URL("https://lctodo.alexcoders.com"),
+  applicationName: "LC Todo",
+  keywords: [
+    "LeetCode",
+    "LeetCode Todo",
+    "LeetCode List",
+    "Coding Practice",
+    "Coding Problems",
+    "Todo List for Coders",
+  ],
+  authors: [{ name: "Alex Gusev", url: "https://alexcoders.com" }],
+  openGraph: {
+    title: "LC Todo - The Ultimate LeetCode Todo List",
+    description:
+      "Organize your LeetCode tasks efficiently with LC Todo. The perfect tool for aspiring coders and developers.",
+    url: "https://lctodo.alexcoders.com",
+    siteName: "LC Todo",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "LC Todo - The Ultimate LeetCode Todo List",
+    description:
+      "Organize your LeetCode tasks efficiently with LC Todo. The perfect tool for aspiring coders and developers.",
+    site: "@AlexCoders",
+  },
 };
 
 export default function RootLayout({
@@ -58,6 +87,7 @@ export default function RootLayout({
           </ClientProviders>
         </ThemeProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

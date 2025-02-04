@@ -10,7 +10,11 @@ const LOCALSTORAGE_KEY = "is-desktop";
 
 export const useResponsive = () => {
   const [state, setState] = useState(() => {
-    const isDesktop = localStorage.getItem(LOCALSTORAGE_KEY);
+    let isDesktop: boolean = false;
+
+    if (typeof window !== "undefined") {
+      isDesktop = !!localStorage.getItem(LOCALSTORAGE_KEY);
+    }
 
     return {
       isMobile: false,

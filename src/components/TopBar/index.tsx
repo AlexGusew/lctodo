@@ -12,9 +12,11 @@ import SignIn from "@/components/TopBar/SignIn";
 const User = ({ name }: { name: string }) => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
-      <Button variant="link">{name}</Button>
+      <Button variant="link" aria-label="User settings">
+        {name}
+      </Button>
     </DropdownMenuTrigger>
-    <DropdownMenuContent align="end" className="min-w-36">
+    <DropdownMenuContent align="end">
       <DropdownMenuItem onClick={logout}>
         Sign out
         <ArrowLeftStartOnRectangleIcon className="ml-auto" />

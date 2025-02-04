@@ -19,6 +19,8 @@ export const Footer = () => (
           key={label + href}
           variant="link"
           className="opacity-60 hover:opacity-100 text-xs px-0"
+          aria-label="Footer link"
+          asChild
         >
           <a href={href} target="_blank" rel="noopener noreferrer">
             {label}

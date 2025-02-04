@@ -36,7 +36,12 @@ export const Actions = ({ dailyQuestion }: ActionsProps) => {
     <ResponsiveLayout>
       <div className="flex justify-end">
         <BoardSettings />
-        <Button className="ml-auto" variant={"outline"} onClick={onClick}>
+        <Button
+          className="ml-auto"
+          variant={"outline"}
+          onClick={onClick}
+          aria-label="Add daily"
+        >
           Add daily
           <FilledFireIcon
             className={`transition-all ${

@@ -82,7 +82,13 @@ const TodoItemComponent = ({
   );
 
   const link = todo.titleSlug ? (
-    <Button size={"icon"} variant={"ghost"} className="max-sm:h-8">
+    <Button
+      size={"icon"}
+      variant={"ghost"}
+      className="max-sm:h-8 flex-shrink-0"
+      aria-label="Go to the problem on LeetCode"
+      asChild
+    >
       <a
         href={`https://leetcode.com/problems/${todo.titleSlug}`}
         target="_blank"
@@ -94,7 +100,7 @@ const TodoItemComponent = ({
   ) : null;
 
   return (
-    <li className="border rounded-2xl p-4">
+    <div className="border rounded-2xl p-4">
       <div className="flex gap-2 items-center">
         <Button
           variant={"ghost"}
@@ -102,6 +108,7 @@ const TodoItemComponent = ({
           disabled={!todo.title}
           size={"icon"}
           className="disabled:opacity-40 rounded-full shrink-0"
+          aria-label="Toggle done"
         >
           {todo.done ? (
             <CheckCircleIconSolid className="text-green-500 !size-6" />
@@ -129,6 +136,7 @@ const TodoItemComponent = ({
             size={"icon"}
             className="disabled:opacity-40 shrink-0"
             onClick={removeTodo}
+            aria-label="Remove problem"
           >
             <XMarkIcon />
           </Button>
@@ -183,6 +191,7 @@ const TodoItemComponent = ({
                     variant={`ghost`}
                     size={"icon"}
                     onClick={() => addDate(value)}
+                    aria-label={tooltip}
                   >
                     {icon}
                   </Button>
@@ -192,7 +201,7 @@ const TodoItemComponent = ({
             ))}
         </p>
       )}
-    </li>
+    </div>
   );
 };
 

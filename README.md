@@ -2,32 +2,25 @@
 
 ## Configure and run
 
-1. Add `AUTH_SECRET`
-
-- `npx auth secret` - could be generated via cli
-
-1. Set `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET`
-
-- They could be found on [GitHub](https://github.com/settings/applications/2853004)
+1. Set `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET`, could be found on [GitHub](https://github.com/settings/applications/2853004)
 
 1. Set `DATABASE_URL` in format `mysql://USER:PASSWORD@HOST:PORT/DATABASE`
 
-## Database Schema Migration
+1. Set `EDGE_CONFIG`, `VERCEL_API_TOKEN`, and `EDGE_CONFIG_ID` found on Vercel
 
-If you've made changes to the Prisma schema (`schema.prisma`) and need to update the database, follow these steps:
+1. For development only, set `CRON_SECRET` with random string
 
-### 1. Generate a New Migration
-
-Use the following command to create a new migration file and apply it to your development database. Replace `add-layout-column` with a descriptive name for your migration.
+## Useful CLI commands
 
 ```sh
+# Add migration
 npx prisma migrate dev --name {migration name here}
-```
-
-### 2. Generate Prisma Client
-
-After applying the migration, regenerate the Prisma Client to reflect the latest schema changes.
-
-```sh
 npx prisma generate
+
+# Update DB schema without adding migrations
+npx prisma db push
+
+# Reset migrations and schema
+rm -rf prisma/migrations
+npx prisma db push --force-reset && npx prisma db push
 ```

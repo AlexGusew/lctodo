@@ -66,6 +66,7 @@ const TodoDatePicker = ({
         <PopoverAnchor virtualRef={datesWrapperRef} />
         <PopoverTrigger asChild>
           <Button
+            aria-label="Set deadline"
             variant="ghost"
             className={cn(
               "w-full flex-1 justify-start text-left font-normal pl-[0.5rem] text-sm",
