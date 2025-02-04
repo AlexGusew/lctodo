@@ -340,8 +340,6 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
       </CollapsibleContent>
     </Collapsible>
   );
-  debugger;
-  console.log(isColumnLayout);
 
   if (isColumnLayout) {
     return (

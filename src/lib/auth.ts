@@ -117,8 +117,6 @@ export const getCurrentSession = cache(
       return { session: null, user: null };
     }
     const result = await validateSessionToken(token);
-    console.log({ result });
-
     return result;
   }
 );

@@ -42,7 +42,6 @@ export async function GET(request: Request): Promise<Response> {
     },
   });
   const githubUser = await githubUserResponse.json();
-  console.log(githubUser);
 
   const userDto: GithubUser = {
     githubId: githubUser.id,
