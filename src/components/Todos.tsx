@@ -38,6 +38,7 @@ import { Button } from "@/components/ui/button";
 import { HashtagIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { cn } from "@/lib/utils";
 import { useColumnLayout } from "@/lib/useColumnLayout";
+import { useResponsive } from "@/lib/useResponsive";
 
 interface TodoProps {
   isAuth: boolean;
@@ -85,11 +86,19 @@ const ColumnHeader = ({
   return header;
 };
 
-const AddTodo = ({ onClick }: { onClick: () => void }) => (
-  <Button variant="ghost" size="icon" onClick={onClick}>
-    <PlusIcon />
-  </Button>
-);
+const AddTodo = ({ onClick }: { onClick: () => void }) => {
+  const { isMobile } = useResponsive();
+  return (
+    <Button
+      variant={isMobile ? "outline" : "ghost"}
+      className={isMobile ? "ml-auto" : ""}
+      size="icon"
+      onClick={onClick}
+    >
+      <PlusIcon />
+    </Button>
+  );
+};
 
 const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
   const todos = useAtomValue(filteredTodosAtom);
