@@ -58,12 +58,11 @@ export const TodosByDate = ({
     <>
       {keys.map((key) => {
         const todos = grouped[key];
-        const isInput = todos.length === 1 && !todos[0].title;
         const date = todos[0].date;
 
         return (
           <Fragment key={key}>
-            {!isInput && renderTitle(getDisplayDate(date))}
+            {renderTitle(getDisplayDate(date))}
             {mapTodos(todos)}
           </Fragment>
         );

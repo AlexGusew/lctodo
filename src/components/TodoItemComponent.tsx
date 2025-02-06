@@ -34,7 +34,6 @@ interface TodoItemComponentProps {
   onSetSelectedValue: (value: SuggestionDto[number] | null) => void;
   removeTodo: () => void;
   onSetSearchValue: (value: string) => void;
-  closeDisabled: boolean;
   showDatePicker?: boolean;
 }
 
@@ -46,7 +45,6 @@ const TodoItemComponent = ({
   onSetSelectedValue,
   removeTodo,
   onSetSearchValue,
-  closeDisabled,
   showDatePicker = true,
 }: TodoItemComponentProps) => {
   const datesWrapperRef = useRef<HTMLParagraphElement>(null);
@@ -130,17 +128,15 @@ const TodoItemComponent = ({
           />
           {!isMobile && link}
         </div>
-        {!closeDisabled && (
-          <Button
-            variant={"ghost"}
-            size={"icon"}
-            className="disabled:opacity-40 shrink-0"
-            onClick={removeTodo}
-            aria-label="Remove problem"
-          >
-            <XMarkIcon />
-          </Button>
-        )}
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          className="disabled:opacity-40 shrink-0"
+          onClick={removeTodo}
+          aria-label="Remove problem"
+        >
+          <XMarkIcon />
+        </Button>
       </div>
       {!!todo.difficulty && todo.tags.length && (
         <div className="flex items-center gap-2 mx-1 my-2 flex-wrap">
