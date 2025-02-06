@@ -11,9 +11,9 @@ import {
 import { Input } from "./ui/input";
 import { Popover, PopoverAnchor, PopoverContent } from "./ui/popover";
 import { Skeleton } from "./ui/skeleton";
-import { DifficultyChip } from "@/components/ui/DifficultyChip";
 import type { SuggestionDto } from "@/actions/problems";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import Chip from "@/components/ui/chip";
 
 interface DefaultItem {
   id: string;
@@ -130,12 +130,19 @@ export function AutoComplete<T extends DefaultItem>({
                         {/* TODO: Make generics instead */}
                         {(option as unknown as SuggestionDto[number]).label}
                       </span>
-                      <DifficultyChip
+                      {}
+                      <Chip
                         difficulty={
                           (option as unknown as SuggestionDto[number]).data
                             .difficulty
                         }
-                      />
+                        variant="difficulty"
+                      >
+                        {
+                          (option as unknown as SuggestionDto[number]).data
+                            .difficulty
+                        }
+                      </Chip>
                     </CommandItem>
                   ))}
                 </CommandGroup>

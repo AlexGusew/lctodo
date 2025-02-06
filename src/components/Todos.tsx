@@ -18,9 +18,15 @@ import {
   startOfToday,
   startOfTomorrow,
 } from "date-fns";
-import { useAtom, useAtomValue, type ExtractAtomValue } from "jotai";
+import {
+  useAtom,
+  useAtomValue,
+  useSetAtom,
+  type ExtractAtomValue,
+} from "jotai";
 import {
   disableAnimationsAtom,
+  filteredTodosAtom,
   isDailyDoneAtom,
   sectionOpen,
   todosAtom,
@@ -86,7 +92,8 @@ const AddTodo = ({ onClick }: { onClick: () => void }) => (
 );
 
 const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
-  const [todos, setTodos] = useAtom(todosAtom);
+  const todos = useAtomValue(filteredTodosAtom);
+  const setTodos = useSetAtom(todosAtom);
   const [sectionOpenValue, setSectionOpen] = useAtom(sectionOpen);
   const [, setIsDailyDone] = useAtom(isDailyDoneAtom);
   const disableAnimations = useAtomValue(disableAnimationsAtom);

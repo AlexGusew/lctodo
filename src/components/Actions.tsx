@@ -2,6 +2,7 @@
 
 import type { Question, TodoItem } from "@/app/types";
 import { BoardSettings } from "@/components/BoardSettings";
+import { Filter, FilterOptions } from "@/components/Filter";
 // import { ResponsiveLayout } from "@/components/ResponsiveLayout";
 import { Button } from "@/components/ui/button";
 import { isDailyDoneAtom, todosAtom } from "@/state";
@@ -33,23 +34,27 @@ export const Actions = ({ dailyQuestion }: ActionsProps) => {
   };
 
   return (
-    <div className="flex justify-end">
-      <BoardSettings />
-      <Button
-        className="ml-auto"
-        variant={"outline"}
-        onClick={onClick}
-        aria-label="Add daily"
-      >
-        Add daily
-        <FilledFireIcon
-          className={`transition-all ${
-            isDailyDone
-              ? "animate-bounce animate-custom-bounce fill-orange-500"
-              : "opacity-50"
-          }`}
-        />
-      </Button>
-    </div>
+    <>
+      <div className="flex justify-end gap-2">
+        <BoardSettings />
+        <Filter />
+        <Button
+          className="ml-auto"
+          variant={"outline"}
+          onClick={onClick}
+          aria-label="Add daily"
+        >
+          Add daily
+          <FilledFireIcon
+            className={`transition-all ${
+              isDailyDone
+                ? "animate-bounce animate-custom-bounce fill-orange-500"
+                : "opacity-50"
+            }`}
+          />
+        </Button>
+      </div>
+      <FilterOptions />
+    </>
   );
 };

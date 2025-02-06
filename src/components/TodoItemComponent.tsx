@@ -16,7 +16,6 @@ import { useDebounceValue } from "usehooks-ts";
 import { useDebouncedEffect } from "@/lib/useDebouncedEffect";
 import { useInitialRender } from "@/lib/useInitialRender";
 import { cn } from "@/lib/utils";
-import { DifficultyChip } from "@/components/ui/DifficultyChip";
 import { useResponsive } from "@/lib/useResponsive";
 import { useAtomValue } from "jotai";
 import { showTagsAtom } from "@/state";
@@ -25,6 +24,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Chip from "@/components/ui/chip";
 
 interface TodoItemComponentProps {
   todo: TodoItem;
@@ -141,7 +141,9 @@ const TodoItemComponent = ({
       {!!todo.difficulty && todo.tags.length && (
         <div className="flex items-center gap-2 mx-1 my-2 flex-wrap">
           {!!todo.titleSlug && isMobile && link}
-          {!!todo.difficulty && <DifficultyChip difficulty={todo.difficulty} />}
+          {!!todo.difficulty && (
+            <Chip difficulty={todo.difficulty} variant='difficulty'>{todo.difficulty}</Chip>
+          )}
           {isShowTags &&
             todo.tags?.map((tag) => (
               <span
