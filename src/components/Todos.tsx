@@ -101,7 +101,8 @@ const AddTodo = ({ onClick }: { onClick: () => void }) => {
 };
 
 const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
-  const todos = useAtomValue(filteredTodosAtom);
+  const filteredTodos = useAtomValue(filteredTodosAtom);
+  const allTodos = useAtomValue(todosAtom);
   const setTodos = useSetAtom(todosAtom);
   const [sectionOpenValue, setSectionOpen] = useAtom(sectionOpen);
   const [, setIsDailyDone] = useAtom(isDailyDoneAtom);
@@ -118,13 +119,13 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
   useDebouncedEffect(
     () => {
       const save = async () => {
-        await saveTodo(todos);
+        await saveTodo(allTodos);
       };
       if (isAuth) {
         save();
       }
     },
-    [todos],
+    [allTodos],
     2000
   );
 
@@ -233,21 +234,21 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
    * - Not done
    * - No date or date today or in past
    */
-  const inProgressTodos = todos.filter(
+  const inProgressTodos = filteredTodos.filter(
     (todo) =>
       !todo.done && (!todo.date || isBefore(todo.date, startOfTomorrow()))
   );
   /**
    * - Date is tomorrow or later
    */
-  const futureTodos = todos.filter(
+  const futureTodos = filteredTodos.filter(
     (todo) => !todo.done && todo.date && isAfter(todo.date, endOfToday())
   );
 
   /**
    * - Done
    */
-  const doneTodos = todos.filter((todo) => todo.done);
+  const doneTodos = filteredTodos.filter((todo) => todo.done);
 
   function removeTodo(id: string): void {
     setTodos((todos) => todos.filter((todo) => todo.id !== id));
