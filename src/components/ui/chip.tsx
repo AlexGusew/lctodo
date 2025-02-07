@@ -17,7 +17,7 @@ const chipVariants = cva("whitespace-nowrap", {
       Hard: "dark:bg-rose-700 bg-rose-500",
     },
     outline: {
-      selected: "outline outline-2 dark:outline-white-500 outline-black-500",
+      selected: "outline outline-2 dark:outline-white outline-black",
     },
     asButton: {
       set: "hover:opacity-80 transition-opacity duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none",

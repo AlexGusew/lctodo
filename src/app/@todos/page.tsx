@@ -23,13 +23,12 @@ export default async function TodosPage() {
       />
       <ResponsiveLayout>
         <Actions dailyQuestion={dailyQuestion ?? undefined} />
-          <TodosLayout>
-            <Todos
-              isAuth={!!session}
-              dailyQuestion={dailyQuestion ?? undefined}
-            />
-          </TodosLayout>
-
+        <TodosLayout>
+          <Todos
+            isAuth={!!session}
+            dailyQuestion={dailyQuestion ?? undefined}
+          />
+        </TodosLayout>
       </ResponsiveLayout>
     </>
   );

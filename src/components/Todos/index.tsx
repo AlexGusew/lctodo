@@ -1,15 +1,10 @@
 "use client";
 
-import { useCallback, type PropsWithChildren } from "react";
+import { useCallback } from "react";
 import type { Question, TodoItem } from "@/app/types";
-import TodoItemComponent from "@/components/TodoItemComponent";
+import TodoItemComponent from "@/components/Todos/TodoItemComponent";
 import { saveTodo, type SuggestionDto } from "@/actions/problems";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { ChevronUpDownIcon } from "@heroicons/react/24/solid";
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { useDebouncedEffect } from "@/lib/useDebouncedEffect";
 import {
   endOfToday,
@@ -29,76 +24,19 @@ import {
   filteredTodosAtom,
   isDailyDoneAtom,
   sectionOpen,
+  selectedFiltersAtom,
   todosAtom,
 } from "@/state";
 import { TodosByDate } from "@/components/TodosByDate";
 import { AnimatedItem } from "@/components/AnimatedItem";
 import { AnimatePresence } from "motion/react";
-import { Button } from "@/components/ui/button";
-import { HashtagIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { cn } from "@/lib/utils";
-import { useColumnLayout } from "@/lib/useColumnLayout";
-import { useResponsive } from "@/lib/useResponsive";
+import { ColumnHeader } from "@/components/Todos/ColumnHeader";
+import { AddTodo } from "@/components/Todos/AddTodo";
 
 interface TodoProps {
   isAuth: boolean;
   dailyQuestion?: Question;
 }
-
-const ColumnHeader = ({
-  collapsed,
-  label,
-  amount,
-  children,
-}: PropsWithChildren<{
-  collapsed: boolean;
-  label: string;
-  amount: number;
-}>) => {
-  const isColumnLayout = useColumnLayout();
-
-  const header = (
-    <div
-      className={`flex items-center gap-2 mb-4 ${
-        collapsed && isColumnLayout ? "[writing-mode:vertical-lr]" : ""
-      }`}
-    >
-      <CollapsibleTrigger className={cn({ "opacity-60": collapsed })} asChild>
-        <Button
-          variant={"ghost"}
-          className="font-bold text-xl flex items-center gap-3 p-0 hover:bg-[none] [justify-content:flex-start]"
-        >
-          <ChevronUpDownIcon
-            className={`size-4 -mr-2 opacity-70 ${
-              collapsed ? "" : "scale-110"
-            }`}
-          />
-          {label}
-          <span className="text-[0.7rem] ml-[-0.4rem] flex items-center opacity-60 translate-y-[4px] w-8">
-            <HashtagIcon className="!size-3" />
-            <span className="font-normal ml-0">{amount}</span>
-          </span>
-        </Button>
-      </CollapsibleTrigger>
-      {children}
-    </div>
-  );
-  return header;
-};
-
-const AddTodo = ({ onClick }: { onClick: () => void }) => {
-  const { isMobile } = useResponsive();
-  return (
-    <Button
-      variant={isMobile ? "outline" : "ghost"}
-      className={isMobile ? "ml-auto" : ""}
-      size="icon"
-      onClick={onClick}
-    >
-      <PlusIcon />
-    </Button>
-  );
-};
 
 const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
   const filteredTodos = useAtomValue(filteredTodosAtom);
@@ -107,6 +45,7 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
   const [sectionOpenValue, setSectionOpen] = useAtom(sectionOpen);
   const [, setIsDailyDone] = useAtom(isDailyDoneAtom);
   const disableAnimations = useAtomValue(disableAnimationsAtom);
+  const selectedFilters = useAtomValue(selectedFiltersAtom);
 
   const onOpenChange =
     (prop: keyof ExtractAtomValue<typeof sectionOpen>) => (isOpen: boolean) => {
@@ -119,11 +58,9 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
   useDebouncedEffect(
     () => {
       const save = async () => {
-        await saveTodo(allTodos);
+        if (allTodos.length) await saveTodo(allTodos);
       };
-      if (isAuth) {
-        save();
-      }
+      if (isAuth) save();
     },
     [allTodos],
     2000
@@ -254,6 +191,22 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
     setTodos((todos) => todos.filter((todo) => todo.id !== id));
   }
 
+  function addInProgressTodo() {
+    addTodo({
+      date: startOfToday(),
+      difficulty: Array.from(selectedFilters.difficulty)?.[0],
+      tags: Array.from(selectedFilters.tags),
+    });
+  }
+
+  function addFutureTodo() {
+    addTodo({
+      date: startOfTomorrow(),
+      difficulty: Array.from(selectedFilters.difficulty)?.[0],
+      tags: Array.from(selectedFilters.tags),
+    });
+  }
+
   const inProgressNode = (
     <Collapsible
       open={sectionOpenValue.inProgress}
@@ -264,9 +217,7 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
         collapsed={!sectionOpenValue.inProgress}
         amount={inProgressTodos.length}
       >
-        {sectionOpenValue.inProgress && (
-          <AddTodo onClick={() => addTodo({ date: startOfToday() })} />
-        )}
+        {sectionOpenValue.inProgress && <AddTodo onClick={addInProgressTodo} />}
       </ColumnHeader>
       <CollapsibleContent>
         <ul
@@ -307,9 +258,7 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
         collapsed={!sectionOpenValue.future}
         amount={futureTodos.length}
       >
-        {sectionOpenValue.future && (
-          <AddTodo onClick={() => addTodo({ date: startOfTomorrow() })} />
-        )}
+        {sectionOpenValue.future && <AddTodo onClick={addFutureTodo} />}
       </ColumnHeader>
       <CollapsibleContent>
         <TodosByDate

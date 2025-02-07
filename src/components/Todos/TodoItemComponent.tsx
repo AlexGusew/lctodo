@@ -15,16 +15,13 @@ import { useRef, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
 import { useDebouncedEffect } from "@/lib/useDebouncedEffect";
 import { useInitialRender } from "@/lib/useInitialRender";
-import { cn } from "@/lib/utils";
 import { useResponsive } from "@/lib/useResponsive";
-import { useAtomValue } from "jotai";
-import { showTagsAtom } from "@/state";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import Chip from "@/components/ui/chip";
+import { TodoTags } from "@/components/Todos/TodoTags";
 
 interface TodoItemComponentProps {
   todo: TodoItem;
@@ -54,7 +51,6 @@ const TodoItemComponent = ({
   const [debSearchValue, setDebSearchValue] = useDebounceValue<string>("", 300);
   const [isLoading, setIsLoading] = useState(false);
   const initialRender = useInitialRender();
-  const isShowTags = useAtomValue(showTagsAtom);
 
   const _onSetSearchValue = (value: string) => {
     setSearchValue(value);
@@ -138,24 +134,10 @@ const TodoItemComponent = ({
           <XMarkIcon />
         </Button>
       </div>
-      {!!todo.difficulty && todo.tags.length && (
+      {(!!todo.difficulty || !!todo.tags.length) && (
         <div className="flex items-center gap-2 mx-1 my-2 flex-wrap">
           {!!todo.titleSlug && isMobile && link}
-          {!!todo.difficulty && (
-            <Chip difficulty={todo.difficulty} variant='difficulty'>{todo.difficulty}</Chip>
-          )}
-          {isShowTags &&
-            todo.tags?.map((tag) => (
-              <span
-                key={tag}
-                className={cn(
-                  "bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-2 rounded-full py-0.5 text-xs",
-                  "flex items-center justify-center"
-                )}
-              >
-                {tag}
-              </span>
-            ))}
+          <TodoTags todo={todo} />
         </div>
       )}
 

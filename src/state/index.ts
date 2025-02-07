@@ -1,7 +1,7 @@
 import { TodoItem } from "@/app/types";
 import { atomWithToggle } from "@/lib/utils";
 import { Layout } from "@prisma/client";
-import { atom } from "jotai";
+import { atom, type ExtractAtomValue } from "jotai";
 
 export const showTagsAtom = atom(false);
 export const disableAnimationsAtom = atom(false);
@@ -18,15 +18,16 @@ export const filteredTodosAtom = atom((get) => {
   const selected = get(selectedFiltersAtom);
   const todos = get(todosAtom);
 
-  if (!selected.size) {
-    return todos;
-  }
-
-  return todos.filter(
-    (todo) =>
-      selected.has(todo.difficulty!) ||
-      selected.intersection(new Set(todo.tags)).size
-  );
+  return todos.filter((todo) => {
+    let isValid = true;
+    if (selected.difficulty.size) {
+      isValid &&= selected.difficulty.has(todo.difficulty!);
+    }
+    if (selected.tags.size) {
+      isValid &&= !!selected.tags.intersection(new Set(todo.tags)).size;
+    }
+    return isValid;
+  });
 });
 
 export const isDailyDoneAtom = atom(false);
@@ -51,17 +52,7 @@ export const layoutAtom = atom(
 );
 
 export const filtersAtom = atom((get) => {
-  const todos = get(todosAtom);
-  const selected = get(selectedFiltersAtom);
-
-  let filtered = todos;
-  if (selected.size) {
-    filtered = todos.filter(
-      (todo) =>
-        selected.intersection(new Set(todo.tags)).size ||
-        selected.has(todo.difficulty!)
-    );
-  }
+  const filtered = get(filteredTodosAtom);
   const acc = filtered.reduce(
     (acc, todo) => {
       todo.tags.forEach((tag) => {
@@ -82,19 +73,43 @@ export const filtersAtom = atom((get) => {
 
 export const filtersOpenAtom = atomWithToggle(false);
 
-export const selectedFiltersAtom = atom(new Set<string>());
-
-export const addFilterAtom = atom(null, (get, set, filterToAdd: string) => {
-  const currentFilters = new Set(get(selectedFiltersAtom));
-  currentFilters.add(filterToAdd);
-  set(selectedFiltersAtom, currentFilters);
+export const selectedFiltersAtom = atom({
+  tags: new Set<string>(),
+  difficulty: new Set<NonNullable<TodoItem["difficulty"]>>(),
 });
+
+export const anyFilterSelectedAtom = atom((get) => {
+  const selected = get(selectedFiltersAtom);
+  return !!selected.difficulty.size || !!selected.tags.size;
+});
+
+export type FilterType = keyof ExtractAtomValue<typeof selectedFiltersAtom>;
+
+export const addFilterAtom = atom(
+  null,
+  (get, set, filterToAdd: string, type: FilterType) => {
+    const currentFilters = get(selectedFiltersAtom);
+    const newSet = new Set(currentFilters[type]);
+    newSet.add(filterToAdd);
+    const newFilters = { ...currentFilters, [type]: newSet };
+    set(selectedFiltersAtom, newFilters);
+  }
+);
 
 export const removeFilterAtom = atom(
   null,
-  (get, set, filterToRemove: string) => {
-    const currentFilters = new Set(get(selectedFiltersAtom));
-    currentFilters.delete(filterToRemove);
-    set(selectedFiltersAtom, currentFilters);
+  (get, set, filterToRemove: string, type: FilterType) => {
+    const currentFilters = get(selectedFiltersAtom);
+    const newSet = new Set(currentFilters[type]);
+    newSet.delete(filterToRemove);
+    const newFilters = { ...currentFilters, [type]: newSet };
+    set(selectedFiltersAtom, newFilters);
   }
 );
+
+export const resetFiltersAtom = atom(null, (_, set) => {
+  set(selectedFiltersAtom, {
+    tags: new Set<string>(),
+    difficulty: new Set<NonNullable<TodoItem["difficulty"]>>(),
+  });
+});
