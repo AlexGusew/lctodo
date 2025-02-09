@@ -4,40 +4,31 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 type Item = unknown;
 
 const itemVariants: Variants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 0.4,
-      ease: "anticipate",
-    },
-  },
-  exit: {
-    opacity: 0,
-    transition: {
-      ease: "anticipate",
-      duration: 0.4,
-    },
-  },
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+  exit: { opacity: 0 },
 };
 
 interface AnimatedListProps<T> {
   items: T[];
   getValue: (item: T) => ReactNode;
-  className?: string;
   getKey: (item: T) => string;
+  disableAnimations?: boolean;
+  rootProps?: React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLUListElement>,
+    HTMLUListElement
+  >;
 }
 
 export const AnimatedList = <T extends Item>({
   items,
   getValue,
-  className,
   getKey,
+  disableAnimations,
+  rootProps,
 }: AnimatedListProps<T>) => {
   return (
-    <ul className={className}>
+    <ul {...rootProps}>
       <AnimatePresence initial={false}>
         {items.map((item) => (
           <motion.li
@@ -47,6 +38,10 @@ export const AnimatedList = <T extends Item>({
             initial="hidden"
             animate="visible"
             exit="exit"
+            transition={{
+              ease: "anticipate",
+              duration: disableAnimations ? 0 : 0.4,
+            }}
           >
             {getValue(item)}
           </motion.li>

@@ -23,8 +23,7 @@ export const TodoTags: FC<TodoTagsProps> = ({ todo }) => {
   const onClick =
     <T extends FilterType>(value: string, type: T) =>
     () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if (selectedFilters[type].has(value as any)) {
+      if ((selectedFilters[type] as Set<string>).has(value)) {
         removeFilter(value, type);
       } else {
         addFilter(value, type);
@@ -32,8 +31,7 @@ export const TodoTags: FC<TodoTagsProps> = ({ todo }) => {
     };
 
   const isOutline = (value: string, type: FilterType) =>
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    selectedFilters[type].has(value as any) ? "selected" : undefined;
+    (selectedFilters[type] as Set<string>).has(value) ? "selected" : undefined;
 
   return (
     <>
