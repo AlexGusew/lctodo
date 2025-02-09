@@ -1,11 +1,10 @@
-import type { TodoItem } from "@/app/types";
+import type { FilterType, TodoItem } from "@/app/types";
 import Chip from "@/components/ui/chip";
 import {
   addFilterAtom,
   removeFilterAtom,
   selectedFiltersAtom,
   showTagsAtom,
-  type FilterType,
 } from "@/state";
 import { useAtomValue, useSetAtom } from "jotai";
 import type { FC } from "react";

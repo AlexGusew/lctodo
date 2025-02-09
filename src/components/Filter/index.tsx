@@ -1,3 +1,4 @@
+import type { FilterState } from "@/app/types";
 import { AnimatedList } from "@/components/Filter/AnimatedList";
 import { Button } from "@/components/ui/button";
 import Chip from "@/components/ui/chip";
@@ -10,7 +11,6 @@ import {
   removeFilterAtom,
   resetFiltersAtom,
   selectedFiltersAtom,
-  type FilterState,
 } from "@/state";
 import { FunnelIcon } from "@heroicons/react/24/outline";
 import { FunnelIcon as FunnelIconFilled } from "@heroicons/react/24/solid";
