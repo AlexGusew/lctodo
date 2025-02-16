@@ -3,18 +3,13 @@ import {
   CheckCircleIcon as CheckCircleIconOutline,
   ChevronDoubleRightIcon,
   ChevronRightIcon,
+  EllipsisHorizontalCircleIcon,
 } from "@heroicons/react/24/outline";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import TodoDatePicker from "@/components/TodoDatePicker";
 import { Button } from "@/components/ui/button";
-import { AutoComplete } from "@/components/Search";
 import type { TodoItem } from "@/app/types";
-import { getSuggestions, type SuggestionDto } from "@/actions/problems";
-import { useRef, useState } from "react";
-import { useDebounceValue } from "usehooks-ts";
-import { useDebouncedEffect } from "@/lib/useDebouncedEffect";
-import { useInitialRender } from "@/lib/useInitialRender";
+import { useRef } from "react";
 import { useResponsive } from "@/lib/useResponsive";
 import {
   Tooltip,
@@ -22,16 +17,15 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { TodoTags } from "@/components/Todos/TodoTags";
+import { TodoAutocomplete } from "@/components/Todos/TodoAutocomlete";
 
 interface TodoItemComponentProps {
   todo: TodoItem;
   toggleTodo: () => void;
   handleDateChange: (date?: Date) => void;
   addDate: (value: number) => void;
-  onSetSelectedValue: (value: SuggestionDto[number] | null) => void;
-  removeTodo: () => void;
-  onSetSearchValue: (value: string) => void;
   showDatePicker?: boolean;
+  openPanel: () => void;
 }
 
 const TodoItemComponent = ({
@@ -39,41 +33,11 @@ const TodoItemComponent = ({
   toggleTodo,
   handleDateChange,
   addDate,
-  onSetSelectedValue,
-  removeTodo,
-  onSetSearchValue,
+  openPanel,
   showDatePicker = true,
 }: TodoItemComponentProps) => {
   const datesWrapperRef = useRef<HTMLParagraphElement>(null);
   const { isMobile } = useResponsive();
-  const [searchValue, setSearchValue] = useState(todo.title);
-  const [items, setItems] = useState<SuggestionDto>([]);
-  const [debSearchValue, setDebSearchValue] = useDebounceValue<string>("", 300);
-  const [isLoading, setIsLoading] = useState(false);
-  const initialRender = useInitialRender();
-
-  const _onSetSearchValue = (value: string) => {
-    setSearchValue(value);
-    onSetSearchValue(value);
-    setDebSearchValue(value);
-  };
-
-  const load = async () => {
-    if (initialRender || isLoading || searchValue.length < 3) return;
-
-    setIsLoading(true);
-    const data = await getSuggestions(searchValue);
-    setIsLoading(false);
-    setItems(data);
-  };
-
-  useDebouncedEffect(
-    () => {
-      load();
-    },
-    [debSearchValue],
-    300
-  );
 
   const link = todo.titleSlug ? (
     <Button
@@ -111,20 +75,19 @@ const TodoItemComponent = ({
           )}
         </Button>
         <div className="w-full flex justify-start items-center">
-          <AutoComplete
-            searchValue={searchValue}
-            onSearchValueChange={_onSetSearchValue}
-            items={items}
-            onSelectedValueChange={(s) => {
-              onSetSelectedValue(s);
-            }}
-            selectedId={todo.QID}
-            emptyMessage="Search by problem number, title or URL"
-            isLoading={isLoading}
-          />
+          <TodoAutocomplete todo={todo} />
           {!isMobile && link}
         </div>
         <Button
+          variant={"ghost"}
+          size={"icon"}
+          className="shrink-0"
+          onClick={openPanel}
+          aria-label="Open todo data"
+        >
+          <EllipsisHorizontalCircleIcon />
+        </Button>
+        {/* <Button
           variant={"ghost"}
           size={"icon"}
           className="disabled:opacity-40 shrink-0"
@@ -132,7 +95,7 @@ const TodoItemComponent = ({
           aria-label="Remove problem"
         >
           <XMarkIcon />
-        </Button>
+        </Button> */}
       </div>
       {(!!todo.difficulty || !!todo.tags.length) && (
         <div className="flex items-center gap-2 mx-1 my-2 flex-wrap">

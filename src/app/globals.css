@@ -4,6 +4,9 @@
 
 @layer base {
   :root {
+    --mantine-font-size-md: 0.875rem;
+    --mantine-line-height-md: 1.25rem;
+
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -111,4 +114,27 @@
 
 .animate-custom-bounce {
   animation: tada 1s;
+}
+
+body .w-md-editor-text-pre > code,
+body .w-md-editor-text-input {
+  font-size: var(--mantine-font-size-md) !important;
+  line-height: var(--mantine-line-height-md) !important;
+  /* @apply text-sm */
+  font-family: var(--font-inter) !important;
+}
+body .w-md-editor,
+body .wmde-markdown,
+body *[class^="w-md-"] {
+  /* @apply text-sm */
+  font-size: var(--mantine-font-size-md) !important;
+  line-height: var(--mantine-line-height-md) !important;
+
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+body .wmde-markdown {
+  padding: 10px;
 }

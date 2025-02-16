@@ -25,6 +25,7 @@ import {
   isDailyDoneAtom,
   sectionOpen,
   selectedFiltersAtom,
+  selectedTodoIdAtom,
   todosAtom,
 } from "@/state";
 import { TodosByDate } from "@/components/TodosByDate";
@@ -46,6 +47,7 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
   const [, setIsDailyDone] = useAtom(isDailyDoneAtom);
   const disableAnimations = useAtomValue(disableAnimationsAtom);
   const selectedFilters = useAtomValue(selectedFiltersAtom);
+  const setSelectedTodoIdAtom = useSetAtom(selectedTodoIdAtom);
 
   const onOpenChange =
     (prop: keyof ExtractAtomValue<typeof sectionOpen>) => (isOpen: boolean) => {
@@ -73,6 +75,7 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
         title: "",
         done: false,
         tags: [],
+        description: "",
         ...initialItem,
       };
 
@@ -80,46 +83,6 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
     },
     [setTodos]
   );
-
-  const onSetSelectedValue =
-    (id: string) => async (suggestion: SuggestionDto[number] | null) => {
-      setTodos((todos) =>
-        todos.map((todo) => {
-          if (todo.id === id) {
-            if (!suggestion) {
-              return {
-                ...todo,
-                title: "",
-                difficulty: undefined,
-              };
-            }
-            return {
-              ...todo,
-              title: suggestion.label,
-              difficulty: suggestion.data.difficulty,
-              tags: suggestion.data.topicTags,
-              titleSlug: suggestion.data.titleSlug,
-              QID: suggestion.id,
-            };
-          }
-          return todo;
-        })
-      );
-    };
-
-  const onSetSearchValue = (id: string) => async (title: string) => {
-    setTodos((todos) =>
-      todos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            title,
-          };
-        }
-        return todo;
-      })
-    );
-  };
 
   const toggleTodo = (id: string) => () => {
     setTodos((todos) => {
@@ -187,8 +150,10 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
    */
   const doneTodos = filteredTodos.filter((todo) => todo.done);
 
-  function removeTodo(id: string): void {
-    setTodos((todos) => todos.filter((todo) => todo.id !== id));
+  function openPanel(id: string) {
+    return function () {
+      setSelectedTodoIdAtom(id);
+    };
   }
 
   function addInProgressTodo() {
@@ -232,13 +197,11 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
                 disable={disableAnimations}
               >
                 <TodoItemComponent
+                  openPanel={openPanel(todo.id)}
                   todo={todo}
                   toggleTodo={toggleTodo(todo.id)}
                   handleDateChange={handleDateChange(todo.id)}
                   addDate={addDate(todo.id)}
-                  onSetSelectedValue={onSetSelectedValue(todo.id)}
-                  removeTodo={() => removeTodo(todo.id)}
-                  onSetSearchValue={onSetSearchValue(todo.id)}
                 />
               </AnimatedItem>
             ))}
@@ -266,14 +229,12 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
           renderTodo={(todo) => (
             <AnimatedItem key={todo.id.toString()} disable={disableAnimations}>
               <TodoItemComponent
+                openPanel={openPanel(todo.id)}
                 key={todo.id.toString()}
                 todo={todo}
                 toggleTodo={toggleTodo(todo.id)}
                 handleDateChange={handleDateChange(todo.id)}
                 addDate={addDate(todo.id)}
-                onSetSelectedValue={onSetSelectedValue(todo.id)}
-                removeTodo={() => removeTodo(todo.id)}
-                onSetSearchValue={onSetSearchValue(todo.id)}
               />
             </AnimatedItem>
           )}
@@ -299,15 +260,13 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
           renderTodo={(todo) => (
             <AnimatedItem key={todo.id.toString()} disable={disableAnimations}>
               <TodoItemComponent
+                openPanel={openPanel(todo.id)}
                 showDatePicker={false}
                 key={todo.id.toString()}
                 todo={todo}
                 toggleTodo={toggleTodo(todo.id)}
                 handleDateChange={handleDateChange(todo.id)}
                 addDate={addDate(todo.id)}
-                onSetSelectedValue={onSetSelectedValue(todo.id)}
-                removeTodo={() => removeTodo(todo.id)}
-                onSetSearchValue={onSetSearchValue(todo.id)}
               />
             </AnimatedItem>
           )}

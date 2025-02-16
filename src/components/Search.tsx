@@ -85,7 +85,7 @@ export function AutoComplete<T extends DefaultItem>({
             >
               <Input
                 placeholder={placeholder}
-                className="!ring-0 font-normal !outline-none border-none text-ellipsis"
+                className="px-0 !ring-0 font-normal !outline-none border-none text-ellipsis"
               />
             </CommandPrimitive.Input>
           </PopoverAnchor>

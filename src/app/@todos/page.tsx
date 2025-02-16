@@ -3,6 +3,7 @@ import { Actions } from "@/components/Actions";
 import { InitialLoad } from "@/components/InitialLoad";
 import { ResponsiveLayout } from "@/components/ResponsiveLayout";
 import Todos from "@/components/Todos";
+import { Panel } from "@/components/Todos/Panel";
 import { TodosLayout } from "@/components/TodosLayout";
 import { getCurrentSession } from "@/lib/auth";
 
@@ -30,6 +31,7 @@ export default async function TodosPage() {
           />
         </TodosLayout>
       </ResponsiveLayout>
+      <Panel />
     </>
   );
 }

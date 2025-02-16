@@ -62,7 +62,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn(InterVariable.variable, "antialiased")}
+      className={cn(
+        InterVariable.variable,
+        "antialiased p-8 max-sm:p-4 font-[family-name:var(--font-inter)]"
+      )}
       suppressHydrationWarning
     >
       <head>
@@ -78,12 +81,10 @@ export default function RootLayout({
           <ClientProviders>
             <JotaiProvider>
               <TooltipProvider>
-                <div className="min-h-screen p-8 max-sm:p-4 font-[family-name:var(--font-inter)]">
-                  <main>
-                    {children}
-                    {todos}
-                  </main>
-                </div>
+                <main className="min-h-screen">
+                  {children}
+                  {todos}
+                </main>
                 <hr className="mb-2" />
                 <Footer />
                 <Toaster />

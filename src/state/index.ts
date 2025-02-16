@@ -1,3 +1,4 @@
+import { saveTodo } from "@/actions/problems";
 import {
   TodoItem,
   type FilterState,
@@ -17,6 +18,8 @@ export const sectionOpen = atom({
   future: true,
   inProgress: true,
 });
+
+export const isAuthAtom = atom(false);
 
 export const todosAtom = atom<TodoItem[]>([]);
 
@@ -169,3 +172,45 @@ export const resetFiltersAtom = atom(null, (_, set) => {
     state: new Set<FilterState>(),
   });
 });
+
+export const selectedTodoIdAtom = atom<TodoItem["id"] | null>(null);
+
+export const selectedTodoAtom = atom((get) => {
+  const id = get(selectedTodoIdAtom);
+  const todos = get(todosAtom);
+  return todos.find((todo) => todo.id === id);
+});
+
+let timeoutId: NodeJS.Timeout;
+
+export const setTodoAtom = atom(
+  null,
+  (get, set, newTodo: Partial<TodoItem>) => {
+    clearTimeout(timeoutId);
+
+    const todos = get(todosAtom);
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === newTodo.id) {
+        return {
+          ...todo,
+          ...newTodo,
+        };
+      }
+      return todo;
+    });
+    set(todosAtom, updatedTodos);
+
+    timeoutId = setTimeout(async () => {
+      console.log("timeout");
+      const isAuth = get(isAuthAtom);
+      const _todos = get(todosAtom);
+      console.log({ isAuth, _todos });
+
+      if (isAuth && _todos.length) {
+        console.log("saving");
+
+        return saveTodo(_todos);
+      }
+    }, 1000);
+  }
+);

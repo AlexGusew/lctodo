@@ -27,6 +27,7 @@ model User {
   showTags          Boolean @default(true)
   layout            Layout  @default(row)
   disableAnimations Boolean @default(false)
+  description       String  @default("")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

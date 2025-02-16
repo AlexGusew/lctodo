@@ -3,6 +3,7 @@
 import type { TodoItem } from "@/app/types";
 import {
   disableAnimationsAtom,
+  isAuthAtom,
   rawLayoutAtom,
   showTagsAtom,
   todosAtom,
@@ -30,12 +31,17 @@ export const InitialLoad = ({
 }: InitialLoadProps) => {
   const setTodos = useSetAtom(todosAtom);
   const { toast } = useToast();
+  const setIsAuth = useSetAtom(isAuthAtom);
 
   useHydrateAtoms([
     [showTagsAtom, showTags],
     [rawLayoutAtom, layout],
     [disableAnimationsAtom, disableAnimations],
   ] as const);
+
+  useEffect(() => {
+    setIsAuth(!!isAuth);
+  }, [isAuth, setIsAuth]);
 
   useEffect(() => {
     const rawTodos = localStorage.getItem("todos");

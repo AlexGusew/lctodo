@@ -24,11 +24,12 @@ export const Actions = ({ dailyQuestion }: ActionsProps) => {
       id: crypto.randomUUID(),
       done: false,
       date: startOfToday(),
-      title: dailyQuestion.title,
+      title: `${dailyQuestion.QID}. ${dailyQuestion.title}`,
       tags: dailyQuestion.topicTags,
       difficulty: dailyQuestion.difficulty,
       QID: dailyQuestion.QID,
       titleSlug: dailyQuestion.titleSlug,
+      description: "",
     } satisfies TodoItem;
     setTodos((todos) => [newTodo, ...todos]);
   };

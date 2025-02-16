@@ -11,6 +11,7 @@ export interface TodoItem {
   tags: string[];
   titleSlug?: string;
   QID?: string;
+  description: string;
 }
 
 export interface Question {
