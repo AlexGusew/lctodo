@@ -3,7 +3,7 @@
 import type { Question, TodoItem } from "@/app/types";
 import { BoardSettings } from "@/components/BoardSettings";
 import { Filter, FilterOptions } from "@/components/Filter";
-// import { ResponsiveLayout } from "@/components/ResponsiveLayout";
+ import { ResponsiveLayout } from "@/components/ResponsiveLayout";
 import { Button } from "@/components/ui/button";
 import { isDailyDoneAtom, todosAtom } from "@/state";
 import { FireIcon as FilledFireIcon } from "@heroicons/react/24/solid";
@@ -18,8 +18,14 @@ export const Actions = ({ dailyQuestion }: ActionsProps) => {
   const [, setTodos] = useAtom(todosAtom);
   const isDailyDone = useAtomValue(isDailyDoneAtom);
 
-  const onClick = () => {
-    if (!dailyQuestion) return;
+const onClick = () => {
+  if (!dailyQuestion) return;
+  
+  setTodos((todos) => {
+    if (todos.some(todo => todo.QID === dailyQuestion.QID)) {
+      return todos;
+    }
+    
     const newTodo = {
       id: crypto.randomUUID(),
       done: false,
@@ -30,9 +36,10 @@ export const Actions = ({ dailyQuestion }: ActionsProps) => {
       QID: dailyQuestion.QID,
       titleSlug: dailyQuestion.titleSlug,
     } satisfies TodoItem;
-    setTodos((todos) => [newTodo, ...todos]);
-  };
 
+    return [newTodo, ...todos];
+  });
+};
   return (
     <>
       <div className="flex justify-end gap-2">
