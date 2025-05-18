@@ -42,12 +42,11 @@ const TodoItemComponent = ({
   const datesWrapperRef = useRef<HTMLParagraphElement>(null);
   const { isMobile } = useResponsive();
   const setTodos = useSetAtom(todosAtom);
-  const [todoId, setTodoId] = useAtom(selectedTodoIdAtom);
 
   const onSetSelectedValue = (suggestion: SuggestionDto[number] | null) => {
     setTodos((todos) =>
       todos.map((todo) => {
-        if (todo.id === todoId) {
+        if (todo.id === todo.id) {
           if (!suggestion) {
             return {
               ...todo,

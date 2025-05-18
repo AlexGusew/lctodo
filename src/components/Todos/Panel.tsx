@@ -31,7 +31,7 @@ export const Panel = () => {
   const onSetSelectedValue = (suggestion: SuggestionDto[number] | null) => {
     setTodos((todos) =>
       todos.map((todo) => {
-        if (todo.id === todoId) {
+        if (todo.id === todo.id) {
           if (!suggestion) {
             return {
               ...todo,
