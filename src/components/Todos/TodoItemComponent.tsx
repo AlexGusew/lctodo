@@ -18,6 +18,9 @@ import {
 } from "@/components/ui/tooltip";
 import { TodoTags } from "@/components/Todos/TodoTags";
 import { TodoAutocomplete } from "@/components/Todos/TodoAutocomlete";
+import { useAtom, useSetAtom } from "jotai";
+import { selectedTodoIdAtom, todosAtom } from "@/state";
+import { SuggestionDto } from "@/actions/problems";
 
 interface TodoItemComponentProps {
   todo: TodoItem;
@@ -38,6 +41,33 @@ const TodoItemComponent = ({
 }: TodoItemComponentProps) => {
   const datesWrapperRef = useRef<HTMLParagraphElement>(null);
   const { isMobile } = useResponsive();
+  const setTodos = useSetAtom(todosAtom);
+  const [todoId, setTodoId] = useAtom(selectedTodoIdAtom);
+
+  const onSetSelectedValue = (suggestion: SuggestionDto[number] | null) => {
+    setTodos((todos) =>
+      todos.map((todo) => {
+        if (todo.id === todoId) {
+          if (!suggestion) {
+            return {
+              ...todo,
+              title: "",
+              difficulty: undefined,
+            };
+          }
+          return {
+            ...todo,
+            title: suggestion.label,
+            difficulty: suggestion.data.difficulty,
+            tags: suggestion.data.topicTags,
+            titleSlug: suggestion.data.titleSlug,
+            QID: suggestion.id,
+          };
+        }
+        return todo;
+      }),
+    );
+  };
 
   const link = todo.titleSlug ? (
     <Button
@@ -75,7 +105,7 @@ const TodoItemComponent = ({
           )}
         </Button>
         <div className="w-full flex justify-start items-center">
-          <TodoAutocomplete todo={todo} />
+          <TodoAutocomplete todo={todo} onSelect={onSetSelectedValue} />
           {!isMobile && link}
         </div>
         <Button

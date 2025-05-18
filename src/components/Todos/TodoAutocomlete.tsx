@@ -10,7 +10,7 @@ import { todosAtom } from "@/state";
 
 interface TodoAutocompleteProps {
   todo: TodoItem;
-  onSelect: (id: string) => void;
+  onSelect: (suggestion: SuggestionDto[number] | null) => void;
 }
 
 export const TodoAutocomplete: FC<TodoAutocompleteProps> = ({
@@ -24,31 +24,9 @@ export const TodoAutocomplete: FC<TodoAutocompleteProps> = ({
   const initialRender = useInitialRender();
   const setTodos = useSetAtom(todosAtom);
 
-  const onSetSelectedValue =
-    (id: string) => async (suggestion: SuggestionDto[number] | null) => {
-      setTodos((todos) =>
-        todos.map((todo) => {
-          if (todo.id === id) {
-            if (!suggestion) {
-              return {
-                ...todo,
-                title: "",
-                difficulty: undefined,
-              };
-            }
-            return {
-              ...todo,
-              title: suggestion.label,
-              difficulty: suggestion.data.difficulty,
-              tags: suggestion.data.topicTags,
-              titleSlug: suggestion.data.titleSlug,
-              QID: suggestion.id,
-            };
-          }
-          return todo;
-        }),
-      );
-    };
+  const onSetSelectedValue = (suggestion: SuggestionDto[number] | null) => {
+    onSelect(suggestion);
+  };
 
   const onSetSearchValue = (id: string) => async (title: string) => {
     setTodos((todos) =>

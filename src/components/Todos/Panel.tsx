@@ -1,5 +1,6 @@
 "use client";
 
+import { SuggestionDto } from "@/actions/problems";
 import { MarkdownEditor } from "@/components/MarkdownEditor/Index";
 import { TodoAutocomplete } from "@/components/Todos/TodoAutocomlete";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,31 @@ export const Panel = () => {
     setTodos((todos) => todos.filter((todo) => todo.id !== id));
   }
 
+  const onSetSelectedValue = (suggestion: SuggestionDto[number] | null) => {
+    setTodos((todos) =>
+      todos.map((todo) => {
+        if (todo.id === todoId) {
+          if (!suggestion) {
+            return {
+              ...todo,
+              title: "",
+              difficulty: undefined,
+            };
+          }
+          return {
+            ...todo,
+            title: suggestion.label,
+            difficulty: suggestion.data.difficulty,
+            tags: suggestion.data.topicTags,
+            titleSlug: suggestion.data.titleSlug,
+            QID: suggestion.id,
+          };
+        }
+        return todo;
+      }),
+    );
+  };
+
   return (
     <Sheet open={!!todoId} onOpenChange={() => setTodoId(null)}>
       <SheetContent
@@ -35,7 +61,7 @@ export const Panel = () => {
       >
         <SheetHeader className="flex flex-col gap-4">
           <SheetTitle>
-            <TodoAutocomplete todo={todo} />
+            <TodoAutocomplete todo={todo} onSelect={onSetSelectedValue} />
           </SheetTitle>
           <div className="flex gap-2 flex-wrap">
             {!!todo.difficulty && (

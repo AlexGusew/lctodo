@@ -14,7 +14,7 @@ export const showTagsAtom = atom(false);
 showTagsAtom.debugLabel = "showTags";
 
 export const disableAnimationsAtom = atom(false);
-disableAnimationsAtom.debugLabel = "dusabkeAnimations";
+disableAnimationsAtom.debugLabel = "disableAnimations";
 
 export const sectionOpen = atom({
   done: true,
