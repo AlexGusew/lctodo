@@ -64,7 +64,7 @@ export default function RootLayout({
       lang="en"
       className={cn(
         InterVariable.variable,
-        "antialiased p-8 max-sm:p-4 font-[family-name:var(--font-inter)]"
+        "antialiased p-8 max-sm:p-4 font-[family-name:var(--font-inter)]",
       )}
       suppressHydrationWarning
     >
@@ -78,8 +78,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ClientProviders>
-            <JotaiProvider>
+          <JotaiProvider>
+            <ClientProviders>
               <TooltipProvider>
                 <main className="min-h-screen">
                   {children}
@@ -89,8 +89,8 @@ export default function RootLayout({
                 <Footer />
                 <Toaster />
               </TooltipProvider>
-            </JotaiProvider>
-          </ClientProviders>
+            </ClientProviders>
+          </JotaiProvider>
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

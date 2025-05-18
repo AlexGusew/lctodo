@@ -10,9 +10,13 @@ import { todosAtom } from "@/state";
 
 interface TodoAutocompleteProps {
   todo: TodoItem;
+  onSelect: (id: string) => void;
 }
 
-export const TodoAutocomplete: FC<TodoAutocompleteProps> = ({ todo }) => {
+export const TodoAutocomplete: FC<TodoAutocompleteProps> = ({
+  todo,
+  onSelect,
+}) => {
   const [searchValue, setSearchValue] = useState(todo.title);
   const [items, setItems] = useState<SuggestionDto>([]);
   const [debSearchValue, setDebSearchValue] = useDebounceValue<string>("", 300);
@@ -42,7 +46,7 @@ export const TodoAutocomplete: FC<TodoAutocompleteProps> = ({ todo }) => {
             };
           }
           return todo;
-        })
+        }),
       );
     };
 
@@ -56,7 +60,7 @@ export const TodoAutocomplete: FC<TodoAutocompleteProps> = ({ todo }) => {
           };
         }
         return todo;
-      })
+      }),
     );
   };
 
@@ -80,7 +84,7 @@ export const TodoAutocomplete: FC<TodoAutocompleteProps> = ({ todo }) => {
       load();
     },
     [debSearchValue],
-    300
+    300,
   );
 
   return (

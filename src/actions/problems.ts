@@ -9,10 +9,13 @@ import type { Layout, Prisma } from "@prisma/client";
 import { get } from "@vercel/edge-config";
 import { getCurrentSession } from "@/lib/auth";
 
-const questionsById = (allQuestions as Question[]).reduce((acc, question) => {
-  acc[question.QID] = question;
-  return acc;
-}, {} as Record<Question["QID"], Question>);
+const questionsById = (allQuestions as Question[]).reduce(
+  (acc, question) => {
+    acc[question.QID] = question;
+    return acc;
+  },
+  {} as Record<Question["QID"], Question>,
+);
 
 export type SuggestionDto = {
   data: Question;
@@ -58,7 +61,7 @@ export const getSuggestions = cache(
       label: `${result.item.QID}. ${result.item.title}`,
       data: result.item,
     }));
-  }
+  },
 );
 
 export async function saveTodo(todos: TodoItem[]): Promise<void> {
@@ -92,9 +95,9 @@ export async function changeLayout(layout: Layout) {
 }
 
 export async function getDailyQuestion() {
-  const QID = await get<string>("dailyQID");
-  if (!QID) return null;
-  return questionsById[QID] ?? null;
+  // const QID = await get<string>("dailyQID");
+  // if (!QID) return null;
+  // return questionsById[QID] ?? null;
 }
 
 export async function changeDisableAnimations(disableAnimations: boolean) {

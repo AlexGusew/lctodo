@@ -11,17 +11,23 @@ import { endOfToday, isAfter, isBefore, startOfTomorrow } from "date-fns";
 import { atom } from "jotai";
 
 export const showTagsAtom = atom(false);
+showTagsAtom.debugLabel = "showTags";
+
 export const disableAnimationsAtom = atom(false);
+disableAnimationsAtom.debugLabel = "dusabkeAnimations";
 
 export const sectionOpen = atom({
   done: true,
   future: true,
   inProgress: true,
 });
+sectionOpen.debugLabel = "sectionOpen";
 
 export const isAuthAtom = atom(false);
+isAuthAtom.debugLabel = "isAuth";
 
 export const todosAtom = atom<TodoItem[]>([]);
+todosAtom.debugLabel = "todos";
 
 const difficultyPriority = {
   Easy: 1e1,
@@ -76,14 +82,17 @@ export const filteredTodosAtom = atom((get) => {
     return isValid;
   });
 });
+filteredTodosAtom.debugLabel = "filteredTodos";
 
 export const isDailyDoneAtom = atom(false);
+isDailyDoneAtom.debugLabel = "isDailyDone";
 
 /**
  * col - 1 column
  * row - 1 row
  */
 export const rawLayoutAtom = atom<Layout>(Layout.row);
+rawLayoutAtom.debugLabel = "rawLayout";
 
 export const layoutAtom = atom(
   (get) => get(rawLayoutAtom),
@@ -95,8 +104,9 @@ export const layoutAtom = atom(
     }[cur];
     set(rawLayoutAtom, newLayout);
     return newLayout;
-  }
+  },
 );
+layoutAtom.debugLabel = "layout";
 
 export const filtersAtom = atom((get) => {
   const filtered = get(filteredTodosAtom);
@@ -113,7 +123,7 @@ export const filtersAtom = atom((get) => {
       new Set<string>(),
       new Set<TodoItem["difficulty"]>(),
       new Set<FilterState>(),
-    ] as const
+    ] as const,
   );
   acc[1].delete(undefined);
 
@@ -127,6 +137,7 @@ export const filtersAtom = atom((get) => {
 
   return [tags, diff, state] as const;
 });
+filtersAtom.debugLabel = "filters";
 
 export const filtersOpenAtom = atomWithToggle(false);
 
@@ -135,6 +146,7 @@ export const selectedFiltersAtom = atom({
   difficulty: new Set<NonNullable<TodoItem["difficulty"]>>(),
   state: new Set<FilterState>(),
 });
+selectedFiltersAtom.debugLabel = "selectedFilters";
 
 export const anyFilterSelectedAtom = atom((get) => {
   const selected = get(selectedFiltersAtom);
@@ -142,6 +154,7 @@ export const anyFilterSelectedAtom = atom((get) => {
     !!selected.difficulty.size || !!selected.tags.size || !!selected.state.size
   );
 });
+anyFilterSelectedAtom.debugLabel = "anyFiltersSelected";
 
 export const addFilterAtom = atom(
   null,
@@ -151,8 +164,9 @@ export const addFilterAtom = atom(
     newSet.add(filterToAdd);
     const newFilters = { ...currentFilters, [type]: newSet };
     set(selectedFiltersAtom, newFilters);
-  }
+  },
 );
+addFilterAtom.debugLabel = "addFilter";
 
 export const removeFilterAtom = atom(
   null,
@@ -162,8 +176,9 @@ export const removeFilterAtom = atom(
     newSet.delete(filterToRemove);
     const newFilters = { ...currentFilters, [type]: newSet };
     set(selectedFiltersAtom, newFilters);
-  }
+  },
 );
+removeFilterAtom.debugLabel = "removeFilter";
 
 export const resetFiltersAtom = atom(null, (_, set) => {
   set(selectedFiltersAtom, {
@@ -172,14 +187,17 @@ export const resetFiltersAtom = atom(null, (_, set) => {
     state: new Set<FilterState>(),
   });
 });
+resetFiltersAtom.debugLabel = "resetFilters";
 
 export const selectedTodoIdAtom = atom<TodoItem["id"] | null>(null);
+selectedTodoIdAtom.debugLabel = "selectedTodoId";
 
 export const selectedTodoAtom = atom((get) => {
   const id = get(selectedTodoIdAtom);
   const todos = get(todosAtom);
   return todos.find((todo) => todo.id === id);
 });
+selectedTodoAtom.debugLabel = "selectedTodo";
 
 let timeoutId: NodeJS.Timeout;
 
@@ -212,5 +230,6 @@ export const setTodoAtom = atom(
         return saveTodo(_todos);
       }
     }, 1000);
-  }
+  },
 );
+setTodoAtom.debugLabel = "setTodo";
