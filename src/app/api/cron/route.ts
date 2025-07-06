@@ -29,7 +29,7 @@ const setQID = async (QID: string) => {
           },
         ],
       }),
-    }
+    },
   );
   const result = await updateEdgeConfig.json();
   console.log(result);

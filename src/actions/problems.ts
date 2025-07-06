@@ -95,9 +95,14 @@ export async function changeLayout(layout: Layout) {
 }
 
 export async function getDailyQuestion() {
-  // const QID = await get<string>("dailyQID");
-  // if (!QID) return null;
-  // return questionsById[QID] ?? null;
+  try {
+    const QID = await get<string>("dailyQID");
+    if (!QID) return null;
+    return questionsById[QID] ?? null;
+  } catch {
+    console.error("Failed to fetch daily question ID");
+    return null;
+  }
 }
 
 export async function changeDisableAnimations(disableAnimations: boolean) {
