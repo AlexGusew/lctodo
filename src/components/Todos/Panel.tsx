@@ -57,7 +57,7 @@ export const Panel = () => {
     <Sheet open={!!todoId} onOpenChange={() => setTodoId(null)}>
       <SheetContent
         aria-describedby="todo data"
-        className="flex flex-col gap-4 overflow-x-auto"
+        className="flex flex-col gap-4 overflow-x-auto w-[calc(75%+100px)] min-w-[calc(25%+100px)]"
       >
         <SheetHeader className="flex flex-col gap-4">
           <SheetTitle>
