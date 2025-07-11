@@ -9,7 +9,7 @@ import { selectedTodoAtom, setTodoAtom } from "@/state";
 import { Separator } from "@/components/ui/separator";
 
 export const MarkdownEditor = () => {
-  const [display, setDisplay] = useState<"preview" | "edit">("preview");
+  const [display, setDisplay] = useState<"preview" | "edit">("edit");
   const selectedTodo = useAtomValue(selectedTodoAtom);
   const setTodo = useSetAtom(setTodoAtom);
 
