@@ -9,6 +9,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ClientProviders } from "@/components/ClientProviders";
 import { Toaster } from "@/components/ui/toaster";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import Script from "next/script";
 
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -92,6 +93,13 @@ export default function RootLayout({
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
+        {process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (
+          <Script
+            src="https://cloud.umami.is/script.js"
+            data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
+            strategy="afterInteractive"
+          />
+        )}
       </body>
     </html>
   );
