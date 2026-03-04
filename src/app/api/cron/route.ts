@@ -1,5 +1,4 @@
 import { NextResponse, type NextRequest } from "next/server";
-import fetch from "node-fetch";
 
 interface DailyDto {
   data?: {
@@ -31,8 +30,10 @@ const setQID = async (QID: string) => {
       }),
     }
   );
-  const result = await updateEdgeConfig.json();
-  console.log(result);
+  if (!updateEdgeConfig.ok) {
+    throw new Error(`Edge Config update failed: ${updateEdgeConfig.status}`);
+  }
+  await updateEdgeConfig.json();
 };
 
 const getLeetCodeDailyQID = async () => {
@@ -75,11 +76,13 @@ query questionOfToday {
       query: query,
     }),
   });
+  if (!rawData.ok) {
+    throw new Error(`LeetCode API request failed: ${rawData.status}`);
+  }
   const data = (await rawData.json()) as DailyDto;
   const id =
     data?.data?.activeDailyCodingChallengeQuestion?.question
       ?.frontendQuestionId;
-  console.log({ QID: id });
   return id;
 };
 
@@ -90,10 +93,17 @@ export async function GET(request: NextRequest) {
       status: 401,
     });
   }
-  const QID = await getLeetCodeDailyQID();
-  if (!QID) {
-    return NextResponse.json({ ok: false });
+  try {
+    const QID = await getLeetCodeDailyQID();
+    if (!QID) {
+      return NextResponse.json({ ok: false });
+    }
+    await setQID(QID);
+    return NextResponse.json({ ok: true, QID });
+  } catch (e) {
+    return NextResponse.json(
+      { ok: false, error: e instanceof Error ? e.message : "Unknown error" },
+      { status: 500 }
+    );
   }
-  await setQID(QID);
-  return NextResponse.json({ ok: true, QID });
 }

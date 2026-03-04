@@ -1,5 +1,5 @@
 import {
-  TodoItem,
+  type TodoItem,
   type FilterState,
   type FilterType,
   type QuestionDifficulty,

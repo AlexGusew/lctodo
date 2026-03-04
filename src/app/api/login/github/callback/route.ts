@@ -41,7 +41,21 @@ export async function GET(request: Request): Promise<Response> {
       Authorization: `Bearer ${tokens.accessToken()}`,
     },
   });
+  if (!githubUserResponse.ok) {
+    return new Response("Failed to fetch GitHub user", {
+      status: 502,
+    });
+  }
   const githubUser = await githubUserResponse.json();
+
+  if (
+    typeof githubUser.id !== "number" ||
+    typeof githubUser.login !== "string"
+  ) {
+    return new Response("Invalid GitHub user response", {
+      status: 502,
+    });
+  }
 
   const userDto: GithubUser = {
     githubId: githubUser.id,

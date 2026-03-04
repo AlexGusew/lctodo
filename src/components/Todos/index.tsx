@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import type { Question, TodoItem } from "@/app/types";
 import TodoItemComponent from "@/components/Todos/TodoItemComponent";
 import { saveTodo, type SuggestionDto } from "@/actions/problems";
@@ -46,6 +46,7 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
   const [, setIsDailyDone] = useAtom(isDailyDoneAtom);
   const disableAnimations = useAtomValue(disableAnimationsAtom);
   const selectedFilters = useAtomValue(selectedFiltersAtom);
+  const isInitialMount = useRef(true);
 
   const onOpenChange =
     (prop: keyof ExtractAtomValue<typeof sectionOpen>) => (isOpen: boolean) => {
@@ -57,10 +58,15 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
 
   useDebouncedEffect(
     () => {
-      const save = async () => {
-        if (allTodos.length) await saveTodo(allTodos);
-      };
-      if (isAuth) save();
+      if (isInitialMount.current) {
+        isInitialMount.current = false;
+        return;
+      }
+      if (isAuth) {
+        saveTodo(allTodos).catch((e) =>
+          console.error("Failed to save todos:", e)
+        );
+      }
     },
     [allTodos],
     2000

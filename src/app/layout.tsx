@@ -10,7 +10,6 @@ import { ClientProviders } from "@/components/ClientProviders";
 import { Toaster } from "@/components/ui/toaster";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-import "jotai-devtools/styles.css";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 

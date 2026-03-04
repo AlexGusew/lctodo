@@ -105,7 +105,7 @@ const TodoItemComponent = ({
           aria-label="Toggle done"
         >
           {todo.done ? (
-            <CheckCircleIconSolid className="text-green-500 size-6!" />
+            <CheckCircleIconSolid className="text-green-500 dark:text-green-400 size-6!" />
           ) : (
             <CheckCircleIconOutline className="text-gray-500 dark:text-gray-400 size-6!" />
           )}

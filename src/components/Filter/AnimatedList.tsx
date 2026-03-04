@@ -1,5 +1,5 @@
 import React, { type ReactNode } from "react";
-import { motion, AnimatePresence, Variants } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "motion/react";
 
 type Item = unknown;
 

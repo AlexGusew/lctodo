@@ -8,9 +8,9 @@ export default function Loading() {
       <div className="flex flex-col gap-8 pt-16">
         {Array.from({ length: 3 }).map((_, i) => (
           <Fragment key={i}>
-            <Skeleton className="w-48 h-6 mb-[-20]" />
+            <Skeleton className="w-48 h-6 mb-[-20px]" />
             {Array.from({ length: 1 }).map((_, i) => (
-              <Skeleton key={i} className="h-[100] w-full rounded-xl" />
+              <Skeleton key={i} className="h-[100px] w-full rounded-xl" />
             ))}
           </Fragment>
         ))}

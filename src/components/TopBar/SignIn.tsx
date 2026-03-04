@@ -30,7 +30,7 @@ export default function SignIn() {
         <Image
           src={
             theme.resolvedTheme === "light"
-              ? "github-mark.svg"
+              ? "/github-mark.svg"
               : "/github-mark-white.svg"
           }
           alt="GitHub logo"

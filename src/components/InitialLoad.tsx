@@ -44,7 +44,14 @@ export const InitialLoad = ({
   useEffect(() => {
     const rawTodos = localStorage.getItem("todos");
     if (!serverTodos.length && rawTodos && isAuth) {
-      const todos = JSON.parse(rawTodos);
+      let todos: TodoItem[];
+      try {
+        todos = JSON.parse(rawTodos);
+      } catch {
+        localStorage.removeItem("todos");
+        setTodos(serverTodos);
+        return;
+      }
       todos.forEach((todo: TodoItem) => {
         if (todo.date) {
           todo.date = new Date(todo.date);

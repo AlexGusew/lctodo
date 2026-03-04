@@ -5,7 +5,7 @@ import { BoardSettings } from "@/components/BoardSettings";
 import { Filter, FilterOptions } from "@/components/Filter";
 // import { ResponsiveLayout } from "@/components/ResponsiveLayout";
 import { Button } from "@/components/ui/button";
-import { isDailyDoneAtom, todosAtom } from "@/state";
+import { disableAnimationsAtom, isDailyDoneAtom, todosAtom } from "@/state";
 import { FireIcon as FilledFireIcon } from "@heroicons/react/24/solid";
 import { startOfToday } from "date-fns";
 import { useAtom, useAtomValue } from "jotai";
@@ -17,6 +17,7 @@ interface ActionsProps {
 export const Actions = ({ dailyQuestion }: ActionsProps) => {
   const [, setTodos] = useAtom(todosAtom);
   const isDailyDone = useAtomValue(isDailyDoneAtom);
+  const disableAnimations = useAtomValue(disableAnimationsAtom);
 
   const onClick = () => {
     if (!dailyQuestion) return;
@@ -48,7 +49,7 @@ export const Actions = ({ dailyQuestion }: ActionsProps) => {
           <FilledFireIcon
             className={`transition-all ${
               isDailyDone
-                ? "animate-bounce animate-custom-bounce fill-orange-500"
+                ? `${disableAnimations ? "" : "animate-bounce animate-custom-bounce "}fill-orange-500`
                 : "opacity-50"
             }`}
           />

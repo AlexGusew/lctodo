@@ -74,7 +74,7 @@ const TodoDatePicker = ({
             )}
           >
             {!!selected ? (
-              <SolidCalendarIcon className="rm-2 h4 w-4" />
+              <SolidCalendarIcon className="mr-2 h-4 w-4" />
             ) : (
               <CalendarIcon className="mr-2 h-4 w-4" />
             )}

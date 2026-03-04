@@ -20,9 +20,6 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
     return response;
   }
 
-  if (request.method === "GET") {
-    return NextResponse.next();
-  }
   const originHeader = request.headers.get("Origin");
   // NOTE: You may need to use `X-Forwarded-Host` instead
   const hostHeader = request.headers.get("Host");
@@ -46,3 +43,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   }
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.svg$).*)"],
+};

@@ -6,7 +6,7 @@ const chipVariants = cva("whitespace-nowrap", {
   variants: {
     variant: {
       default:
-        "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800",
+        "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
       tag: "bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-2 rounded-full py-0.5 text-xs flex items-center justify-center",
       difficulty:
         "text-white px-2 rounded-full py-0.5 text-xs flex items-center justify-center bg-gray-500",

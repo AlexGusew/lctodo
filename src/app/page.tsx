@@ -17,7 +17,7 @@ export default function Home() {
             src="/logo-dark.svg"
             width={20}
             height={20}
-            alt="LC Todd logo"
+            alt="LC Todo logo"
           />
           LC Todo
         </h1>

@@ -10,6 +10,7 @@ export const AddTodo = ({ onClick }: { onClick: () => void }) => {
       className={isMobile ? "ml-auto" : ""}
       size="icon"
       onClick={onClick}
+      aria-label="Add problem"
     >
       <PlusIcon />
     </Button>

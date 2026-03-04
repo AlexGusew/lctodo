@@ -61,34 +61,59 @@ export const getSuggestions = cache(
   }
 );
 
-export async function saveTodo(todos: TodoItem[]): Promise<void> {
-  const { user } = await getCurrentSession();
-  if (!user) return;
+export async function saveTodo(
+  todos: TodoItem[]
+): Promise<{ error: string } | undefined> {
+  try {
+    if (!Array.isArray(todos)) {
+      return { error: "Invalid todos data" };
+    }
+    const { user } = await getCurrentSession();
+    if (!user) return { error: "Not authenticated" };
 
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { todos: todos as unknown as Prisma.JsonArray },
-  });
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { todos: todos as unknown as Prisma.JsonArray },
+    });
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : "Failed to save todos" };
+  }
 }
 
-export async function changeShowTags(showTags: boolean) {
-  const { user } = await getCurrentSession();
-  if (!user) return;
+export async function changeShowTags(
+  showTags: boolean
+): Promise<{ error: string } | undefined> {
+  try {
+    const { user } = await getCurrentSession();
+    if (!user) return { error: "Not authenticated" };
 
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { showTags },
-  });
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { showTags },
+    });
+  } catch (e) {
+    return {
+      error: e instanceof Error ? e.message : "Failed to update show tags",
+    };
+  }
 }
 
-export async function changeLayout(layout: Layout) {
-  const { user } = await getCurrentSession();
-  if (!user) return;
+export async function changeLayout(
+  layout: Layout
+): Promise<{ error: string } | undefined> {
+  try {
+    const { user } = await getCurrentSession();
+    if (!user) return { error: "Not authenticated" };
 
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { layout },
-  });
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { layout },
+    });
+  } catch (e) {
+    return {
+      error: e instanceof Error ? e.message : "Failed to update layout",
+    };
+  }
 }
 
 export async function getDailyQuestion() {
@@ -97,12 +122,21 @@ export async function getDailyQuestion() {
   return questionsById[QID] ?? null;
 }
 
-export async function changeDisableAnimations(disableAnimations: boolean) {
-  const { user } = await getCurrentSession();
-  if (!user) return;
+export async function changeDisableAnimations(
+  disableAnimations: boolean
+): Promise<{ error: string } | undefined> {
+  try {
+    const { user } = await getCurrentSession();
+    if (!user) return { error: "Not authenticated" };
 
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { disableAnimations },
-  });
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { disableAnimations },
+    });
+  } catch (e) {
+    return {
+      error:
+        e instanceof Error ? e.message : "Failed to update animation settings",
+    };
+  }
 }
