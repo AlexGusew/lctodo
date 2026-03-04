@@ -69,7 +69,7 @@ const Todos = ({ isAuth, dailyQuestion }: TodoProps) => {
   const addTodo = useCallback(
     async (initialItem: Partial<TodoItem> = {}) => {
       const newTodo: TodoItem = {
-        id: crypto.randomUUID(),
+        id: globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2),
         title: "",
         done: false,
         tags: [],
