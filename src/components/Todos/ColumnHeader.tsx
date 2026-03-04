@@ -26,7 +26,7 @@ export const ColumnHeader = ({
       <CollapsibleTrigger className={cn({ "opacity-60": collapsed })} asChild>
         <Button
           variant={"ghost"}
-          className="font-bold text-xl flex items-center gap-3 p-0 hover:bg-[none] [justify-content:flex-start]"
+          className="font-bold text-xl flex items-center gap-3 p-0 hover:bg-[none] justify-start"
         >
           <ChevronUpDownIcon
             className={`size-4 -mr-2 opacity-70 ${
@@ -35,7 +35,7 @@ export const ColumnHeader = ({
           />
           {label}
           <span className="text-[0.7rem] ml-[-0.4rem] flex items-center opacity-60 translate-y-[4px] w-8">
-            <HashtagIcon className="!size-3" />
+            <HashtagIcon className="size-3!" />
             <span className="font-normal ml-0">{amount}</span>
           </span>
         </Button>

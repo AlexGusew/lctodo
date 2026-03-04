@@ -79,7 +79,7 @@ const TodoItemComponent = ({
     <Button
       size={"icon"}
       variant={"ghost"}
-      className="max-sm:h-8 flex-shrink-0"
+      className="max-sm:h-8 shrink-0"
       aria-label="Go to the problem on LeetCode"
       asChild
     >
@@ -105,9 +105,9 @@ const TodoItemComponent = ({
           aria-label="Toggle done"
         >
           {todo.done ? (
-            <CheckCircleIconSolid className="text-green-500 !size-6" />
+            <CheckCircleIconSolid className="text-green-500 size-6!" />
           ) : (
-            <CheckCircleIconOutline className="text-gray-500 dark:text-gray-400 !size-6" />
+            <CheckCircleIconOutline className="text-gray-500 dark:text-gray-400 size-6!" />
           )}
         </Button>
         <div className="w-full flex justify-start items-center">

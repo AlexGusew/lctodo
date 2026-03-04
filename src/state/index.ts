@@ -5,7 +5,7 @@ import {
   type QuestionDifficulty,
 } from "@/app/types";
 import { atomWithToggle } from "@/lib/utils";
-import { Layout } from "@prisma/client";
+import { Layout } from "@/generated/prisma/enums";
 import { endOfToday, isAfter, isBefore, startOfTomorrow } from "date-fns";
 import { atom } from "jotai";
 

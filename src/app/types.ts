@@ -1,5 +1,5 @@
 import type { selectedFiltersAtom } from "@/state";
-import type { User } from "@prisma/client";
+import type { User } from "@/generated/prisma/client";
 import type { ExtractAtomValue } from "jotai";
 
 export interface TodoItem {

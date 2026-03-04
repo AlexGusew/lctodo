@@ -78,7 +78,7 @@ export default function RootLayout({
           <ClientProviders>
             <JotaiProvider>
               <TooltipProvider>
-                <div className="min-h-screen p-8 max-sm:p-4 font-[family-name:var(--font-inter)]">
+                <div className="min-h-screen p-8 max-sm:p-4 font-(family-name:--font-inter)">
                   <main>
                     {children}
                     {todos}

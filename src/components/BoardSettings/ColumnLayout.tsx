@@ -5,7 +5,7 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useResponsive } from "@/lib/useResponsive";
 import { layoutAtom } from "@/state";
 import { CheckIcon } from "@heroicons/react/24/solid";
-import { Layout } from "@prisma/client";
+import { Layout } from "@/generated/prisma/enums";
 import { useAtom } from "jotai";
 
 export const ColumnLayout = () => {

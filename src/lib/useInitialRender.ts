@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+const subscribe = () => () => {};
 
 export const useInitialRender = () => {
-  const [initialRender, setInitialRender] = useState(true);
-  useEffect(() => {
-    setInitialRender(false);
-  }, []);
-  return initialRender;
+  return useSyncExternalStore(
+    subscribe,
+    () => false,
+    () => true
+  );
 };

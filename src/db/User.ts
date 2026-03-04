@@ -1,6 +1,6 @@
 import type { GithubUser, PreparedUser, TodoItem } from "@/app/types";
 import { prisma } from "@/db/prisma";
-import type { User } from "@prisma/client";
+import type { User } from "@/generated/prisma/client";
 
 export async function createGithubUser(githubUser: GithubUser) {
   return prisma.user.create({

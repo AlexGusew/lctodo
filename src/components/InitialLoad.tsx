@@ -7,7 +7,7 @@ import {
   showTagsAtom,
   todosAtom,
 } from "@/state";
-import { Layout } from "@prisma/client";
+import { Layout } from "@/generated/prisma/enums";
 import { useSetAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import { useEffect } from "react";

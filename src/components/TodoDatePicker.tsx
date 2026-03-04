@@ -9,7 +9,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import type { DayPickerSingleProps } from "react-day-picker";
 import { PopoverAnchor } from "@radix-ui/react-popover";
 import { useState } from "react";
 import useMediaQuery from "@/lib/useMediaQuery";
@@ -32,10 +31,11 @@ export const getDisplayDate = (date: Date | undefined) => {
   }
 };
 
-type TodoDatePickerProps = Pick<
-  DayPickerSingleProps,
-  "selected" | "onSelect"
-> & { datesWrapperRef: React.RefObject<HTMLParagraphElement> };
+type TodoDatePickerProps = {
+  selected?: Date;
+  onSelect?: (date: Date | undefined) => void;
+  datesWrapperRef: React.RefObject<HTMLParagraphElement>;
+};
 
 const TodoDatePicker = ({
   onSelect,
@@ -45,8 +45,8 @@ const TodoDatePicker = ({
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 640px)");
 
-  const handleSelect: DayPickerSingleProps["onSelect"] = (...props) => {
-    onSelect?.(...props);
+  const handleSelect = (date: Date | undefined) => {
+    onSelect?.(date);
     setIsOpen(false);
   };
 
@@ -55,8 +55,8 @@ const TodoDatePicker = ({
       mode="single"
       selected={selected}
       onSelect={handleSelect}
-      initialFocus
-      fromDate={new Date()}
+      autoFocus
+      startMonth={new Date()}
     />
   );
 
@@ -69,7 +69,7 @@ const TodoDatePicker = ({
             aria-label="Set deadline"
             variant="ghost"
             className={cn(
-              "w-full flex-1 justify-start text-left font-normal pl-[0.5rem] text-sm",
+              "w-full flex-1 justify-start text-left font-normal pl-2 text-sm",
               !selected && "text-muted-foreground"
             )}
           >

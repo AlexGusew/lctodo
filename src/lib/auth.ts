@@ -5,7 +5,7 @@ import {
 import { sha256 } from "@oslojs/crypto/sha2";
 import { cookies } from "next/headers";
 
-import type { Session } from "@prisma/client";
+import type { Session } from "@/generated/prisma/client";
 import { prisma } from "@/db/prisma";
 import { GitHub } from "arctic";
 import { cache } from "react";

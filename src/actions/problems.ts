@@ -5,7 +5,7 @@ import Fuse, { type FuseResult } from "fuse.js";
 import allQuestions from "@/../public/questions.json";
 import { prisma } from "@/db/prisma";
 import { cache } from "react";
-import type { Layout, Prisma } from "@prisma/client";
+import type { Layout, Prisma } from "@/generated/prisma/client";
 import { get } from "@vercel/edge-config";
 import { getCurrentSession } from "@/lib/auth";
 

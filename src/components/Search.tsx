@@ -85,7 +85,7 @@ export function AutoComplete<T extends DefaultItem>({
             >
               <Input
                 placeholder={placeholder}
-                className="!ring-0 font-normal !outline-none border-none text-ellipsis"
+                className="ring-0! font-normal outline-hidden! border-none text-ellipsis"
               />
             </CommandPrimitive.Input>
           </PopoverAnchor>
@@ -101,7 +101,7 @@ export function AutoComplete<T extends DefaultItem>({
                 e.preventDefault();
               }
             }}
-            className="sm:w-[--radix-popover-trigger-width] w-[calc(100vw-20px)] p-0"
+            className="sm:w-(--radix-popover-trigger-width) w-[calc(100vw-20px)] p-0"
           >
             <CommandList>
               {isLoading && (
