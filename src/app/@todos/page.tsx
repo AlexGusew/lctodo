@@ -6,6 +6,8 @@ import Todos from "@/components/Todos";
 import { TodosLayout } from "@/components/TodosLayout";
 import { getCurrentSession } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 export default async function TodosPage() {
   const [dailyQuestion, { user, session }] = await Promise.all([
     getDailyQuestion(),
@@ -20,6 +22,7 @@ export default async function TodosPage() {
         layout={user?.layout}
         disableAnimations={user?.disableAnimations}
         isAuth={!!session}
+        userName={user?.githubName ?? user?.githubUsername ?? user?.githubEmail ?? undefined}
       />
       <ResponsiveLayout>
         <Actions dailyQuestion={dailyQuestion ?? undefined} />

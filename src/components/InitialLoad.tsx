@@ -2,6 +2,7 @@
 
 import type { TodoItem } from "@/app/types";
 import {
+  authUserAtom,
   disableAnimationsAtom,
   rawLayoutAtom,
   showTagsAtom,
@@ -19,6 +20,7 @@ interface InitialLoadProps {
   layout?: Layout;
   disableAnimations?: boolean;
   isAuth?: boolean;
+  userName?: string;
 }
 
 export const InitialLoad = ({
@@ -27,6 +29,7 @@ export const InitialLoad = ({
   layout = Layout.row,
   disableAnimations = false,
   isAuth,
+  userName,
 }: InitialLoadProps) => {
   const setTodos = useSetAtom(todosAtom);
   const { toast } = useToast();
@@ -35,6 +38,7 @@ export const InitialLoad = ({
     [showTagsAtom, showTags],
     [rawLayoutAtom, layout],
     [disableAnimationsAtom, disableAnimations],
+    [authUserAtom, userName ?? null],
   ] as const);
 
   useEffect(() => {

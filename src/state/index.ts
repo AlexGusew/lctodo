@@ -11,6 +11,7 @@ import { atom } from "jotai";
 
 export const showTagsAtom = atom(false);
 export const disableAnimationsAtom = atom(false);
+export const authUserAtom = atom<string | null>(null);
 
 export const sectionOpen = atom({
   done: true,

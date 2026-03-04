@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -6,8 +8,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
-import { getCurrentSession, logout } from "@/lib/auth";
+import { logout } from "@/actions/auth";
 import SignIn from "@/components/TopBar/SignIn";
+import { authUserAtom } from "@/state";
+import { useAtomValue } from "jotai";
 
 const User = ({ name }: { name: string }) => (
   <DropdownMenu>
@@ -25,11 +29,7 @@ const User = ({ name }: { name: string }) => (
   </DropdownMenu>
 );
 
-export const TopBar = async () => {
-  const { user } = await getCurrentSession();
-  return user ? (
-    <User name={user.githubName ?? user.githubUsername ?? user.githubEmail} />
-  ) : (
-    <SignIn />
-  );
+export const TopBar = () => {
+  const userName = useAtomValue(authUserAtom);
+  return userName ? <User name={userName} /> : <SignIn />;
 };

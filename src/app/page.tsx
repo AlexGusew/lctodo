@@ -7,7 +7,7 @@ import Image from "next/image";
  * export const experimental_ppr = true;
  */
 
-export default async function Home() {
+export default function Home() {
   return (
     <ResponsiveLayout>
       <div className="flex items-center justify-between align-middle mt-4 mb-8 max-sm:mt-0">
