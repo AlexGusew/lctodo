@@ -11,10 +11,8 @@ import { Button } from "@/components/ui/button";
 import { AutoComplete } from "@/components/Search";
 import type { TodoItem } from "@/app/types";
 import { getSuggestions, type SuggestionDto } from "@/actions/problems";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
-import { useDebouncedEffect } from "@/lib/useDebouncedEffect";
-import { useInitialRender } from "@/lib/useInitialRender";
 import { useResponsive } from "@/lib/useResponsive";
 import {
   Tooltip,
@@ -50,30 +48,40 @@ const TodoItemComponent = ({
   const [items, setItems] = useState<SuggestionDto>([]);
   const [debSearchValue, setDebSearchValue] = useDebounceValue<string>("", 300);
   const [isLoading, setIsLoading] = useState(false);
-  const initialRender = useInitialRender();
+  const loadIdRef = useRef(0);
 
   const _onSetSearchValue = (value: string) => {
     setSearchValue(value);
     onSetSearchValue(value);
     setDebSearchValue(value);
+    if (value.length >= 3) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+      setItems([]);
+    }
   };
 
-  const load = async () => {
-    if (initialRender || isLoading || searchValue.length < 3) return;
+  useEffect(() => {
+    if (debSearchValue.length < 3) {
+      loadIdRef.current++;
+      return;
+    }
 
-    setIsLoading(true);
-    const data = await getSuggestions(searchValue);
-    setIsLoading(false);
-    setItems(data);
-  };
+    const currentLoadId = ++loadIdRef.current;
 
-  useDebouncedEffect(
-    () => {
-      load();
-    },
-    [debSearchValue],
-    300
-  );
+    getSuggestions(debSearchValue)
+      .then((data) => {
+        if (loadIdRef.current === currentLoadId) {
+          setItems(data);
+        }
+      })
+      .finally(() => {
+        if (loadIdRef.current === currentLoadId) {
+          setIsLoading(false);
+        }
+      });
+  }, [debSearchValue]);
 
   const link = todo.titleSlug ? (
     <Button
